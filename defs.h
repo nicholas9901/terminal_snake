@@ -12,12 +12,11 @@
 
 #define          DEBUG 1
 
-#define         BUFFER 16
+// Game Constants
 #define    PARTS_START 2
-#define     GAME_SPEED 500000
+#define     GAME_SPEED 100000
 #define    BOUND_WIDTH 32
 #define   BOUND_HEIGHT 16
-#define      BYTE_SIZE 8
 
 #define   ACTIVE_WIDTH (BOUND_WIDTH - 2)
 #define  ACTIVE_HEIGHT (BOUND_HEIGHT - 2)
@@ -30,7 +29,9 @@
 #define    RIGHT_BOUND BOUND_WIDTH
 #define PERIMETER_SIZE 2 * BOUND_WIDTH + 2 * BOUND_HEIGHT - 4
 
+#define UNICODE_LENGTH 4
 #define  BYTES_PER_ROW BOUND_WIDTH / BYTE_SIZE
+#define      BYTE_SIZE 8
 #define  BITMAP_LENGTH PARTS_MAX
 
 // ANSI Escape Codes

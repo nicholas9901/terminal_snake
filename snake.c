@@ -79,17 +79,17 @@ int main() {
         }
         draw_snake(&snake, &apple);
         usleep(GAME_SPEED);
-        #if DEBUG
-        for (int i = top_bound_adj+1; i <= bottom_bound_adj-1; i++) {
-            for (int j = left_bound_adj+1; j <= right_bound_adj-1; j++) {
-                printf(esc "%d;%dH%d", i+10,j,get_bit(&collision_map, j, i));
-            }
-        }
-        #endif
     }
     printf(esc "%d;%dHGame Over!", bottom_bound_adj + 2, left_bound_adj);
     while (key_main != 'q' && key_main != '\n') {
         read(0, &key_main, 1);
     }
     clean();
+    #if DEBUG
+        for (int i = top_bound_adj+1; i <= bottom_bound_adj-1; i++) {
+            for (int j = left_bound_adj+1; j <= right_bound_adj-1; j++) {
+                printf(esc "%d;%dH%d", i+10,j,get_bit(&collision_map, j, i));
+            }
+        }
+    #endif
 }

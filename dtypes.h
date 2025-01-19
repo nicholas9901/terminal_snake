@@ -14,7 +14,7 @@ typedef struct point {
 typedef struct point_u {
     int x;
     int y;
-    char icon[4];
+    char icon[UNICODE_LENGTH];
 } point_u;
 
 typedef struct snake {

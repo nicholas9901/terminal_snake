@@ -94,11 +94,11 @@ void rand_point_u(point_u* p, bitmap* b, snake* s)
     p->y = (rand_bit / ACTIVE_WIDTH) + top_bound_adj + 1;
 
     #if DEBUG
-        for (int i = top_bound_adj+1; i <= bottom_bound_adj-1; i++) {
-            for (int j = left_bound_adj+1; j <= right_bound_adj-1; j++) {
-                printf(esc "%d;%dHa", p->y+10,p->x);
-            }
-        }
+        // for (int i = top_bound_adj+1; i <= bottom_bound_adj-1; i++) {
+        //     for (int j = left_bound_adj+1; j <= right_bound_adj-1; j++) {
+        //         printf(esc "%d;%dHa", p->y+10,p->x);
+        //     }
+        // }
         printf(esc "4;0Haw:%d", ACTIVE_WIDTH);
         printf(esc "5;0Hcx:%d cy:%d", (rand_bit % ACTIVE_WIDTH) + left_bound_adj, (rand_bit / ACTIVE_WIDTH) + top_bound_adj);
         printf(esc "6;0Hrb:%d", rand_bit);
@@ -166,14 +166,23 @@ int out_of_bounds(int x, int y) {
 
 int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
 {
+    /*
+    The tail of the snake is cleared in each call of `draw_snake()` so it does
+    not have collision
+    */
     bool done = false;
-    for (int i = s->num_segments - 1; i >= 0; i--) {
+
+    clear_bit(
+        b, 
+        s->segments[s->num_segments - 1].x, 
+        s->segments[s->num_segments - 1].y
+    );
+
+    for (int i = s->num_segments - 1; i > 0; i--) {
         s->segments[i].x = s->segments[i - 1].x;
         s->segments[i].y = s->segments[i - 1].y;
     }
-
-    clear_bit(b, s->segments[s->num_segments - 1].x, s->segments[s->num_segments - 1].y);
-
+    
     while (!done) {
         switch(key_curr) {
             case 'w':
@@ -198,11 +207,13 @@ int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
         }
     }
     *key_prev = key_curr;
+
     if (a->x == s->segments[0].x && a->y == s->segments[0].y) {
         add_segment(s);
         rand_point_u(a, b, s);
         s->score++;
     }
+
     if (
         get_bit(b, s->segments[0].x, s->segments[0].y) || 
         out_of_bounds(s->segments[0].x, s->segments[0].y)
@@ -210,7 +221,9 @@ int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
         strcpy(s->segments[0].icon, "X");
         return 0;
     }
+    
     set_bit(b, s->segments[0].x, s->segments[0].y);
+
     return 1;
 }
 
