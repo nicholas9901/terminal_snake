@@ -11,16 +11,16 @@ typedef struct point {
     char icon;
 } point;
 
-typedef struct point_u {
+typedef struct point_wide {
     int x;
     int y;
-    char icon[UNICODE_LENGTH];
-} point_u;
+    char icon[POINT_WIDE_LENGTH];
+} point_wide;
 
 typedef struct snake {
     int num_segments;
     int score;
-    point_u segments[PARTS_MAX];
+    point_wide segments[PARTS_MAX];
 } snake;
 
 typedef struct bitmap {

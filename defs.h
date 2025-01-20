@@ -29,13 +29,14 @@
 #define    RIGHT_BOUND BOUND_WIDTH
 #define PERIMETER_SIZE 2 * BOUND_WIDTH + 2 * BOUND_HEIGHT - 4
 
-#define UNICODE_LENGTH 4
+#define POINT_WIDE_LENGTH 8 /* To fit 2 unicode characters */
 #define  BYTES_PER_ROW BOUND_WIDTH / BYTE_SIZE
 #define      BYTE_SIZE 8
 #define  BITMAP_LENGTH PARTS_MAX
 
 // ANSI Escape Codes
 #define        esc "\x1b["
+#define         yx "%d;%dH"
 #define term_clear esc "2J"
 #define    alt_buf esc "?1049"
 #define     cursor esc "?25"

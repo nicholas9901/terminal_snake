@@ -12,16 +12,16 @@ int main() {
     int state = 1;
     int perimeter = PERIMETER_SIZE;
     snake snake;
-    point_u apple;
-    point_u bounds[perimeter];
+    point_wide apple;
+    point_wide bounds[perimeter];
     bitmap collision_map;
     srand(time(NULL));
     init_canvas();
     init_term();
     init_bounds(bounds);
     init_snake(&snake);
-    init_point_u(&apple, 0, 0, "Ƈ");
-    rand_point_u(&apple, &collision_map, &snake);
+    init_point_wide(&apple, 0, 0, "()");
+    random_pos(&apple, &collision_map, &snake);
     init_collision(&collision_map, bounds, &snake, perimeter);
     draw_snake(&snake, &apple);
     draw_bounds(bounds, perimeter);
@@ -75,6 +75,7 @@ int main() {
 
         if (!move(&snake, &apple, &collision_map, key_m_curr, &key_m_prev)) {
             draw_snake(&snake, &apple);
+            printf(esc yx "%s", snake.segments[0].y, snake.segments[0].x, "░░");
             break;
         }
         draw_snake(&snake, &apple);

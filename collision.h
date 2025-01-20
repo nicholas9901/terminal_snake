@@ -31,7 +31,7 @@ void clear_bit(bitmap* b, int x, int y) {
 
 void init_collision(
     bitmap* b, 
-    point_u* bounds, 
+    point_wide* bounds, 
     snake* s,
     int perimeter) 
 { 

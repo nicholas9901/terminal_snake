@@ -19,7 +19,7 @@ void init_point(point* p, char icon)
     p->icon = icon;
 }
 
-void init_point_u(point_u* p, int x, int y, char* icon)
+void init_point_wide(point_wide* p, int x, int y, char* icon)
 {
     p->x = x;
     p->y = y;
@@ -30,15 +30,15 @@ void init_snake(snake* s)
 {
     s->num_segments = PARTS_START;
     s->score        = 0;
-    init_point_u(&s->segments[0], mid_x, mid_y, "█");
+    init_point_wide(&s->segments[0], mid_x, mid_y, "██");
     for (int i = 1; i < s->num_segments; i++) {
         s->segments[i].x = s->segments[i - 1].x + 1;
         s->segments[i].y = s->segments[i - 1].y;
-        strcpy(s->segments[i].icon, "█");
+        strcpy(s->segments[i].icon, "██");
     }
 }
 
-void init_bounds(point_u* points)
+void init_bounds(point_wide* points)
 {
     int points_index = 3;
     char
@@ -50,39 +50,39 @@ void init_bounds(point_u* points)
         box_bottom_right[]   = "┛";
 
     // Top left
-    init_point_u(&points[0], left_bound_adj, top_bound_adj, box_top_left);
+    init_point_wide(&points[0], left_bound_adj, top_bound_adj, box_top_left);
     
     // Top right
-    init_point_u(&points[1], right_bound_adj, top_bound_adj, box_top_right);
+    init_point_wide(&points[1], right_bound_adj, top_bound_adj, box_top_right);
     
     // Bottom left
-    init_point_u(&points[2], left_bound_adj, bottom_bound_adj, box_bottom_left);
+    init_point_wide(&points[2], left_bound_adj, bottom_bound_adj, box_bottom_left);
     
     // Bottom right
-    init_point_u(&points[3], right_bound_adj, bottom_bound_adj, box_bottom_right);
+    init_point_wide(&points[3], right_bound_adj, bottom_bound_adj, box_bottom_right);
     
     // Top border
     for (int i = left_bound_adj + 1; i < right_bound_adj; i++) {
-        init_point_u(&points[++points_index], i, top_bound_adj, box_horizontal_bar);
+        init_point_wide(&points[++points_index], i, top_bound_adj, box_horizontal_bar);
     }
 
     // Left border
     for (int i = top_bound_adj + 1; i < bottom_bound_adj; i++) {
-        init_point_u(&points[++points_index], left_bound_adj, i, box_vertical_bar);
+        init_point_wide(&points[++points_index], left_bound_adj, i, box_vertical_bar);
     }
 
     // Right border
     for (int i = top_bound_adj + 1; i < bottom_bound_adj; i++) {
-        init_point_u(&points[++points_index], right_bound_adj, i, box_vertical_bar);
+        init_point_wide(&points[++points_index], right_bound_adj, i, box_vertical_bar);
     }
 
     // Bottom border
     for (int i = left_bound_adj + 1; i < right_bound_adj; i++) {
-        init_point_u(&points[++points_index], i, bottom_bound_adj, box_horizontal_bar);
+        init_point_wide(&points[++points_index], i, bottom_bound_adj, box_horizontal_bar);
     }
 }
 
-void rand_point_u(point_u* p, bitmap* b, snake* s)
+void random_pos(point_wide* p, bitmap* b, snake* s)
 {
     int rand_bit = rand() % BITMAP_LENGTH;
     while (get_bit_linear(b, rand_bit)) {
@@ -114,8 +114,8 @@ void rand_point_u(point_u* p, bitmap* b, snake* s)
 
 void add_segment(snake* s)
 {
-    point_u* curr = &s->segments[s->num_segments];
-    point_u  prev = s->segments[s->num_segments - 1];
+    point_wide* curr = &s->segments[s->num_segments];
+    point_wide  prev = s->segments[s->num_segments - 1];
     curr->x = prev.x;
     curr->y = prev.y;
     strcpy(curr->icon, "█");
@@ -164,7 +164,7 @@ int out_of_bounds(int x, int y) {
     return 0;
 }
 
-int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
+int move(snake* s, point_wide* a, bitmap* b, char key_curr, char* key_prev)
 {
     /*
     The tail of the snake is cleared in each call of `draw_snake()` so it does
@@ -194,11 +194,11 @@ int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
                 done = true;
                 break;
             case 'a':
-                s->segments[0].x--;
+                s->segments[0].x -= 2;
                 done = true;
                 break;
             case 'd':
-                s->segments[0].x++;
+                s->segments[0].x += 2;
                 done = true;
                 break;
             default:
@@ -210,7 +210,7 @@ int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
 
     if (a->x == s->segments[0].x && a->y == s->segments[0].y) {
         add_segment(s);
-        rand_point_u(a, b, s);
+        random_pos(a, b, s);
         s->score++;
     }
 
@@ -218,7 +218,6 @@ int move(snake* s, point_u* a, bitmap* b, char key_curr, char* key_prev)
         get_bit(b, s->segments[0].x, s->segments[0].y) || 
         out_of_bounds(s->segments[0].x, s->segments[0].y)
     ) {
-        strcpy(s->segments[0].icon, "X");
         return 0;
     }
     
