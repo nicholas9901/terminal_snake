@@ -1,13 +1,27 @@
-SOURCE = snake.c
-EXE    = snake
-LD     = clang
+EXE   = snake
+OBJS  = main.o point.o startup.o draw.o
+SDIR  = src
+LD    = gcc
+FLAGS = -g
 
 all: $(EXE)
 
-$(EXE): 
-	$(LD) $(SOURCE) -o $(EXE) -g
+$(EXE): $(OBJS)
+	$(LD) $(FLAGS) $(OBJS) -o $(EXE)
+
+main.o: $(SDIR)/main.c startup.o point.o draw.o
+	$(LD) -c $(FLAGS) $(SDIR)/main.c
+
+point.o: $(SDIR)/point.c startup.o 
+	$(LD) -c $(FLAGS) $(SDIR)/point.c
+
+draw.o: $(SDIR)/draw.c startup.o 
+	$(LD) -c $(FLAGS) $(SDIR)/draw.c
+
+startup.o: $(SDIR)/startup.c
+	$(LD) -c $(FLAGS) $(SDIR)/startup.c
 
 clean:
-	-rm -f $(EXE)     
+	-rm -f $(EXE) *.o
 
 .PHONY: all default

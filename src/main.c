@@ -1,31 +1,29 @@
+#include "prototypes.h"
+
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
 
-#include "point.h"
-#include "collision.h"
-#include "defs.h"
-#include "draw.h"
-#include "startup.h"
-
-int main() {
-    int state = 1;
-    int perimeter = PERIMETER_SIZE;
-    snake snake;
+int main() 
+{
+    snake      snake;
     point_wide apple;
-    point_wide bounds[perimeter];
-    bitmap collision_map;
+    point      bounds[PERIMETER_SIZE];
+    uint8_t    collision[BOUND_WIDTH][BOUND_HEIGHT];
+
     srand(time(NULL));
+
     init_canvas();
     init_term();
-    init_bounds(bounds);
-    init_snake(&snake);
-    init_point_wide(&apple, 0, 0, "()");
-    random_pos(&apple, &collision_map, &snake);
-    init_collision(&collision_map, bounds, &snake, perimeter);
-    draw_snake(&snake, &apple);
-    draw_bounds(bounds, perimeter);
+    init_bounds(bounds, collision);
+    init_snake(&snake, collision);
+    init_point_wide(&apple, mid_x, mid_y, SPRITE_APPLE);
+    collision[mid_x - left_bound_adj][mid_y - top_bound_adj] = COLLISION_APPLE;
+
+    draw_sprites(&snake, &apple);
+    draw_bounds(bounds, PERIMETER_SIZE);
     draw_controls();
+
     fcntl(0, F_SETFL, O_NONBLOCK);
 
     #if DEBUG
@@ -34,9 +32,9 @@ int main() {
     #endif
 
     char 
-        key_main,
-        key_m_curr = 'a',
-        key_m_prev = 'a';
+        key_main   = '0',
+        key_m_curr = 'd',
+        key_m_prev = 'd';
 	while(1) {
         read(0, &key_main, 1);
         key_m_curr = get_movement_key(&key_main);
@@ -48,14 +46,14 @@ int main() {
                 key_main = '0';
                 char str[] = "Paused";
                 int pos_x = right_bound_adj - strlen(str) + 1;
-                printf(esc "%d;%dHPaused",  top_bound_adj - 2, pos_x);
+                printf(esc yx "Paused",  top_bound_adj - 2, pos_x);
                 while(key_main != 'e') {
                     read(0, &key_main, 1);
                     if (key_main == 'q') {
                         exit(0);
                     }
                 }
-                printf(esc "%d;%dH      ",  top_bound_adj - 2, pos_x);
+                printf(esc yx "H      ",  top_bound_adj - 2, pos_x);
                 key_main = '0';
                 break;
         }
@@ -73,12 +71,22 @@ int main() {
         }
         #endif
 
-        if (!move(&snake, &apple, &collision_map, key_m_curr, &key_m_prev)) {
-            draw_snake(&snake, &apple);
-            printf(esc yx "%s", snake.segments[0].y, snake.segments[0].x, "░░");
+        if (!move(&snake, &apple, collision, key_m_curr, &key_m_prev)) {
+            draw_sprites(&snake, &apple);
+            printf(esc yx "%s", snake.segments[0].y, snake.segments[0].x, SPRITE_CRASH);
             break;
         }
-        draw_snake(&snake, &apple);
+        draw_sprites(&snake, &apple);
+
+        #if DEBUG
+            for (int i = 0; i < BOUND_WIDTH; i++) {
+                for (int j = 0; j < BOUND_HEIGHT; j++) {
+                    printf(esc "%d;%dH%d", j+15, i+8,collision[i][j]);
+                    printf(esc yx "X", snake.segments[0].y+15-top_bound_adj, snake.segments[0].x+8-left_bound_adj);
+                }
+            }
+        #endif
+
         usleep(GAME_SPEED);
     }
     printf(esc "%d;%dHGame Over!", bottom_bound_adj + 2, left_bound_adj);
@@ -86,11 +94,4 @@ int main() {
         read(0, &key_main, 1);
     }
     clean();
-    #if DEBUG
-        for (int i = top_bound_adj+1; i <= bottom_bound_adj-1; i++) {
-            for (int j = left_bound_adj+1; j <= right_bound_adj-1; j++) {
-                printf(esc "%d;%dH%d", i+10,j,get_bit(&collision_map, j, i));
-            }
-        }
-    #endif
 }

@@ -1,7 +1,4 @@
-#ifndef STARTUP_H
-#define STARTUP_H
-
-#include "defs.h"
+#include "prototypes.h"
 
 struct termios initial;
 
@@ -58,4 +55,3 @@ void init_term() {
 	t.c_lflag &= (~ECHO & ~ICANON);
 	tcsetattr(1, TCSANOW, &t);
 }
-#endif
