@@ -26,7 +26,8 @@ void init_snake(snake* s, uint8_t c[BOUND_WIDTH][BOUND_HEIGHT])
         strcpy(s->segments[i].icon, SPRITE_SNAKE);
     }
     for (int i = 0; i < s->num_segments - 1; i++) {
-        c[s->segments[i].x][s->segments[i].y] = 1;
+        c[s->segments[i].x - left_bound_adj]
+         [s->segments[i].y - top_bound_adj] = COLLISION_BAD;
     }
 }
 
