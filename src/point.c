@@ -172,9 +172,8 @@ int move(
     The tail of the snake is cleared in each call of `draw_sprites()` so it 
     does not have collision
     */
-    uint8_t* collision_pos = &c[s->segments[0].x - left_bound_adj]
-                               [s->segments[0].y - top_bound_adj];
-    uint8_t done = 0;
+    uint8_t* collision_pos;
+    uint8_t  done = 0;
 
     c[s->segments[s->num_segments - 1].x - left_bound_adj]
      [s->segments[s->num_segments - 1].y - top_bound_adj] = COLLISION_NONE;
@@ -208,6 +207,8 @@ int move(
         }
     }
 
+    collision_pos = &c[s->segments[0].x - left_bound_adj]
+                      [s->segments[0].y - top_bound_adj];
     *key_prev = key_curr;
 
     switch (*collision_pos) {
@@ -225,8 +226,7 @@ int move(
             exit(1);
     }
 
-    c[s->segments[s->num_segments - 1].x - left_bound_adj]
-     [s->segments[s->num_segments - 1].y - top_bound_adj] = COLLISION_BAD;
+    *collision_pos = COLLISION_BAD;
 
     return 1;
 }
