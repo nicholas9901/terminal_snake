@@ -9,7 +9,7 @@ all: $(EXE)
 $(EXE): $(OBJS)
 	$(LD) $(FLAGS) $(OBJS) -o $(EXE)
 
-main.o: $(SDIR)/main.c startup.o point.o draw.o
+main.o: $(SDIR)/main.c startup.o point.o draw.o $(SDIR)/prototypes.h $(SDIR)/definitions.h 
 	$(LD) -c $(FLAGS) $(SDIR)/main.c
 
 point.o: $(SDIR)/point.c startup.o 
