@@ -8,6 +8,7 @@ int
     mid_x, 
     mid_y,
     left_bound_adj,
+    left_bound_adj_snk,
     right_bound_adj,
     top_bound_adj,
     bottom_bound_adj;
@@ -31,6 +32,7 @@ void init_canvas() {
     mid_x            = width / 2;
     mid_y            = height / 2;
     left_bound_adj   = LEFT_BOUND   + mid_x - (BOUND_WIDTH  / 2);
+    left_bound_adj_snk   = left_bound_adj - 1;
     right_bound_adj  = RIGHT_BOUND  + mid_x - (BOUND_WIDTH  / 2);
     top_bound_adj    = TOP_BOUND    + mid_y - (BOUND_HEIGHT / 2);
     bottom_bound_adj = BOTTOM_BOUND + mid_y - (BOUND_HEIGHT / 2);

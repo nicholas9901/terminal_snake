@@ -12,11 +12,12 @@
 
 
 /* Main game-related definitions */
-#define        DEBUG 1
-#define  PARTS_START 2
-#define   GAME_SPEED 100000
-#define  BOUND_WIDTH 32
-#define BOUND_HEIGHT 16
+#define           DEBUG 1
+#define     PARTS_START 2
+#define      GAME_SPEED 100000
+#define     BOUND_WIDTH 32
+#define    BOUND_HEIGHT 16
+#define BOUND_WIDTH_SNK (BOUND_WIDTH + 1)
 
 /*  */
 #define      TOP_BOUND 1

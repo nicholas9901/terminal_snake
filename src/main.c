@@ -9,7 +9,7 @@ int main()
     snake      snake;
     point_wide apple;
     point      bounds[PERIMETER_SIZE];
-    uint8_t    collision[BOUND_WIDTH][BOUND_HEIGHT];
+    uint8_t    collision[BOUND_WIDTH_SNK][BOUND_HEIGHT];
 
     srand(time(NULL));
 
@@ -18,7 +18,7 @@ int main()
     init_bounds(bounds, collision);
     init_snake(&snake, collision);
     init_point_wide(&apple, mid_x, mid_y, SPRITE_APPLE);
-    collision[mid_x - left_bound_adj][mid_y - top_bound_adj] = COLLISION_APPLE;
+    collision[mid_x - left_bound_adj_snk][mid_y - top_bound_adj] = COLLISION_APPLE;
 
     draw_sprites(&snake, &apple);
     draw_bounds(bounds, PERIMETER_SIZE);
@@ -79,10 +79,10 @@ int main()
         draw_sprites(&snake, &apple);
 
         #if DEBUG
-            for (int i = 0; i < BOUND_WIDTH; i++) {
+            for (int i = 0; i < BOUND_WIDTH_SNK; i++) {
                 for (int j = 0; j < BOUND_HEIGHT; j++) {
                     printf(esc "%d;%dH%d", j+15, i+8,collision[i][j]);
-                    printf(esc yx "X", snake.segments[0].y+15-top_bound_adj, snake.segments[0].x+8-left_bound_adj);
+                    printf(esc yx "X", snake.segments[0].y+15-top_bound_adj, snake.segments[0].x+8-left_bound_adj_snk);
                 }
             }
         #endif

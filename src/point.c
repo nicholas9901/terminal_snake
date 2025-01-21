@@ -26,7 +26,7 @@ void init_snake(snake* s, uint8_t c[BOUND_WIDTH][BOUND_HEIGHT])
         strcpy(s->segments[i].icon, SPRITE_SNAKE);
     }
     for (int i = 0; i < s->num_segments - 1; i++) {
-        c[s->segments[i].x - left_bound_adj]
+        c[s->segments[i].x - left_bound_adj_snk]
          [s->segments[i].y - top_bound_adj] = COLLISION_BAD;
     }
 }
@@ -35,50 +35,57 @@ void init_bounds(point* p, uint8_t c[BOUND_WIDTH][BOUND_HEIGHT])
 {
     int points_index = 3;
 
-    // Top left
+    /* Top left */
     init_point(&p[0], left_bound_adj, top_bound_adj, SPRITE_TOP_LEFT);
 
-    // Top right
+    /* Top right */
     init_point(&p[1], right_bound_adj, top_bound_adj, SPRITE_TOP_RIGHT);
     
-    // Bottom left
+    /* Bottom left */
     init_point(&p[2], left_bound_adj, bottom_bound_adj, SPRITE_BOTTOM_LEFT);
 
-    // Bottom right
+    /* Bottom right */
     init_point(&p[3], right_bound_adj, bottom_bound_adj, SPRITE_BOTTOM_RIGHT);
     
     for (int i = left_bound_adj + 1; i < right_bound_adj; i++) {
-        // Top Border
+        /* Top Border */
         init_point(&p[++points_index], i, top_bound_adj, SPRITE_HORIZONTAL_BAR);
 
-        // Bottom Border
+        /* Bottom Border */
         init_point(&p[++points_index], i, bottom_bound_adj, SPRITE_HORIZONTAL_BAR);
 
     } 
-    for (int i = 1; i < BOUND_WIDTH - 1; i++) {
-        // Top Border
+
+    for (int i = top_bound_adj + 1; i < bottom_bound_adj; i++) {
+        /* Left border */
+        init_point(&p[++points_index], left_bound_adj, i, SPRITE_VERTICAL_BAR);
+
+        /* Right border */
+        init_point(&p[++points_index], right_bound_adj, i, SPRITE_VERTICAL_BAR);
+    }
+
+    /*
+    Shift collision fields aside from the left boundary by one to account for
+    the snake which is 2 characters wide    
+    */
+     
+    for (int i = 2; i < BOUND_WIDTH; i += 2) {
+        /* Top Border */
         c[i][0] = COLLISION_BAD;
 
-        // Bottom Border 
+        /* Bottom Border */
         c[i][BOUND_HEIGHT - 1] = COLLISION_BAD;
     }
 
-    for (int i = top_bound_adj + 1; i < bottom_bound_adj; i++) {
-        // Left border
-        init_point(&p[++points_index], left_bound_adj, i, SPRITE_VERTICAL_BAR);
-
-        // Right border
-        init_point(&p[++points_index], right_bound_adj, i, SPRITE_VERTICAL_BAR);
-    }
     for (int i = 1; i < BOUND_HEIGHT - 1; i++) {
-        // Left Border
+        /* Left border */
         c[0][i] = COLLISION_BAD;
 
-        // Right Border 
-        c[BOUND_WIDTH - 1][i] = COLLISION_BAD;
+        /* Right border */
+        c[BOUND_WIDTH][i] = COLLISION_BAD;
     }
     
-    // Zeroing out the middle
+    /* Zeroing out the middle */
     for (int i = 1; i < BOUND_WIDTH - 1; i++) {
         for (int j = 1; j < BOUND_HEIGHT - 1; j++) {
             c[i][j] = COLLISION_NONE;
@@ -88,16 +95,16 @@ void init_bounds(point* p, uint8_t c[BOUND_WIDTH][BOUND_HEIGHT])
 
 void random_pos(point_wide* p, uint8_t c[BOUND_WIDTH][BOUND_HEIGHT], snake* s)
 {
-    int rand_bit = rand() % ACTIVE_AREA;
-    int x        = rand_bit % ACTIVE_WIDTH + 1;
-    int y        = rand_bit / ACTIVE_WIDTH + 1;
+    int rand_bit = rand() % ACTUAL_AREA;
+    int x        = rand_bit % ACTIVE_WIDTH;
+    int y        = rand_bit / ACTIVE_WIDTH;
 
     // while (get_bit_linear(b, rand_bit)) {
     //     rand_bit %= BITMAP_LENGTH;
     //     rand_bit++; 
     // }
 
-    p->x = x + left_bound_adj;
+    p->x = x + left_bound_adj_snk;
     p->y = y + top_bound_adj;
     c[x][y] = COLLISION_APPLE;
 
@@ -175,7 +182,7 @@ int move(
     uint8_t* collision_pos;
     uint8_t  done = 0;
 
-    c[s->segments[s->num_segments - 1].x - left_bound_adj]
+    c[s->segments[s->num_segments - 1].x - left_bound_adj_snk]
      [s->segments[s->num_segments - 1].y - top_bound_adj] = COLLISION_NONE;
 
     for (int i = s->num_segments - 1; i > 0; i--) {
@@ -207,7 +214,7 @@ int move(
         }
     }
 
-    collision_pos = &c[s->segments[0].x - left_bound_adj]
+    collision_pos = &c[s->segments[0].x - left_bound_adj_snk]
                       [s->segments[0].y - top_bound_adj];
     *key_prev = key_curr;
 
