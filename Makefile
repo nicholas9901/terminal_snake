@@ -22,6 +22,6 @@ startup.o: $(SDIR)/startup.c
 	$(LD) -c $(FLAGS) $(SDIR)/startup.c
 
 clean:
-	-rm -f $(EXE) *.o
+	rm -f $(EXE) *.o
 
 .PHONY: all default

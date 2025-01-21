@@ -12,7 +12,7 @@
 
 
 /* Main game-related definitions */
-#define        DEBUG 0
+#define        DEBUG 1
 #define  PARTS_START 2
 #define   GAME_SPEED 100000
 #define  BOUND_WIDTH 32

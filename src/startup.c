@@ -23,10 +23,6 @@ void clean() {
 	tcsetattr(1, TCSANOW, &initial);
 }
 
-void sig_exit(int i) {
-    exit(1);
-}
-
 void init_canvas() {
     struct winsize ws;
 	ioctl(1, TIOCGWINSZ, &ws);
@@ -46,8 +42,8 @@ void init_term() {
 	tcgetattr(1, &t);
 	initial = t;
 	atexit(clean);
-	signal(SIGTERM, sig_exit);
-	signal(SIGINT, sig_exit);
+	signal(SIGTERM, exit);
+	signal(SIGINT, exit);
 	say(
         alt_buf on
         cursor off
