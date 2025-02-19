@@ -1,34 +1,44 @@
 #include "prototypes.h"
 
-void draw_sprites(snake* s, point_wide* a) 
+void draw_sprites(snake* s) 
 {
-    #if DEBUG /* Print the location of each segment */
-        printf(esc "0;0H");
-        for (int i = 0; i < s->num_segments; i++) {
-            printf("(%d,%d)", s->segments[i].x, s->segments[i].y);
-        }
-        printf(esc "2;0H");
-        for (int i = 0; i < s->num_segments; i++) {
-            printf("(%d,%d)", s->segments[i].x - left_bound_adj, s->segments[i].y - top_bound_adj);
-        }
-    #endif
-
-    printf(esc yx "%s", a->y, a->x, a->icon);
-    for (int i = s->num_segments - 1; i >= 0; i--) {
-        printf(esc yx "%s", s->segments[i].y, s->segments[i].x, s->segments[i].icon);
+#if DEBUG /* Print the location of each segment */
+    printf(ESC "0;0H");
+    for (int i = 0; i <= s->ghost_pointer; i++) {
+        printf("(%d,%d)", s->segments[i].x, s->segments[i].y);
     }
-    printf(esc yx "  ", s->segments[s->num_segments - 1].y, s->segments[s->num_segments - 1].x);
-    printf(esc yx "Score: %d", top_bound_adj - 2, left_bound_adj, s->score);
+#endif
+    printf(
+        ESC YX SPRITE_CLEAR, 
+        s->segments[s->ghost_pointer].y + top_bound_adj, 
+        s->segments[s->ghost_pointer].x + left_bound_adj_snk
+    );
+    printf( /* Extra print for add_segment case */
+        ESC YX SPRITE_SNAKE, 
+        s->segments[s->ghost_pointer - 1].y + top_bound_adj, 
+        s->segments[s->ghost_pointer - 1].x + left_bound_adj_snk
+    );
+    printf(
+        ESC YX SPRITE_SNAKE, 
+        s->segments[0].y + top_bound_adj, 
+        s->segments[0].x + left_bound_adj_snk
+    );
+    printf(ESC YX "Score: %d", top_bound_adj - 2, left_bound_adj, s->score);
 }
 
-void draw_bounds(point* bounds, int perimeter) 
+void draw_apple(point* a)
+{
+    printf(ESC YX SPRITE_APPLE, a->y + top_bound_adj, a->x + left_bound_adj_snk);
+}
+
+void draw_bounds(point_u* bounds, int perimeter) 
 {
     for (int i = 0; i < perimeter; i++) {
-        printf(esc yx "%s", bounds[i].y, bounds[i].x, bounds[i].icon);
+        printf(ESC YX "%s", bounds[i].y, bounds[i].x, bounds[i].icon);
     }
 }
 
 void draw_controls() 
 {
-    printf(esc "%d;1H" esc "38;5;0;48;5;251m" "Quit: [q] Pause: [e]" fmt_clear, height);
+    printf(ESC "%d;1H" fmt_info "Quit: [q] Pause: [e]" fmt_clear, height);
 }

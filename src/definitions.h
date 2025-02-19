@@ -12,47 +12,47 @@
 
 
 /* Main game-related definitions */
-#define           DEBUG 1
-#define     PARTS_START 2
-#define      GAME_SPEED 100000
-#define     BOUND_WIDTH 32
-#define    BOUND_HEIGHT 16
-#define BOUND_WIDTH_SNK (BOUND_WIDTH + 1)
+#define                 DEBUG 1
+#define           PARTS_START 1
+#define             GAME_WAIT 100000
+#define        BOUNDARY_WIDTH 8 /* Must be even */
+#define       BOUNDARY_HEIGHT 5
+#define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
+#define BOUNDARY_WIDTH_ACTUAL (BOUNDARY_WIDTH / 2)
 
 /*  */
 #define      TOP_BOUND 1
-#define   BOTTOM_BOUND BOUND_HEIGHT
+#define   BOTTOM_BOUND BOUNDARY_HEIGHT
 #define     LEFT_BOUND 1
-#define    RIGHT_BOUND BOUND_WIDTH
-#define PERIMETER_SIZE (2 * BOUND_WIDTH + 2 * BOUND_HEIGHT - 4)
+#define    RIGHT_BOUND BOUNDARY_WIDTH
+#define PERIMETER_SIZE (2 * BOUNDARY_WIDTH + 2 * BOUNDARY_HEIGHT - 4)
 
 /*  */
-#define        ACTIVE_WIDTH (BOUND_WIDTH - 2)
-#define       ACTIVE_HEIGHT (BOUND_HEIGHT - 2)
-#define         ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
-#define ACTUAL_ACTIVE_WIDTH (ACTIVE_WIDTH / 2)
+#define  ACTIVE_WIDTH ((BOUNDARY_WIDTH - 2) / 2)
+#define ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
+#define   ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
 
 /* Buffer lengths */
-#define      POINT_LENGTH 4 /* Fits 1 unicode character */
-#define POINT_WIDE_LENGTH 8 /* Fits 2 unicode characters */
+#define      POINT_U_LENGTH 4 /* Fits 1 unicode character */
+#define POINT_U_WIDE_LENGTH 8 /* Fits 2 unicode characters */
 
-// ANSI escape codes
-#define        esc "\x1b["    
-#define         yx "%d;%dH"    /* Terminal coordinates */
-#define term_clear esc "2J"     
-#define    alt_buf esc "?1049"
-#define     cursor esc "?25"
-#define         on "h"
-#define        off "l"
+// ANSI ESCape codes
+#define        ESC "\x1b["    
+#define         YX "%d;%dH"    /* Terminal coordinates */
+#define TERM_CLEAR ESC "2J"     
+#define    ALT_BUF ESC "?1049"
+#define     CURSOR ESC "?25"
+#define         ON "h"
+#define        OFF "l"
 
-#define fmt_clear esc "0m"
-
-#define say(str) write(1, str, sizeof(str))
+#define fmt_info  ESC "38;5;0;48;5;251m"
+#define fmt_clear ESC "0m"
 
 /* Sprites */ 
 #define SPRITE_SNAKE          "██"
 #define SPRITE_CRASH          "░░"
 #define SPRITE_APPLE          "()"
+#define SPRITE_CLEAR          "  "
 #define SPRITE_VERTICAL_BAR   "┃"
 #define SPRITE_HORIZONTAL_BAR "━"
 #define SPRITE_TOP_LEFT       "┏"
@@ -78,19 +78,24 @@ typedef enum {
 typedef struct point {
     int x;
     int y;
-    char icon[POINT_LENGTH];
 } point;
 
-typedef struct point_wide {
+typedef struct point_u {
     int x;
     int y;
-    char icon[POINT_WIDE_LENGTH];
-} point_wide;
+    char icon[POINT_U_LENGTH];
+} point_u;
+
+typedef struct point_u_wide {
+    int x;
+    int y;
+    char icon[POINT_U_WIDE_LENGTH];
+} point_u_wide;
 
 typedef struct snake {
-    int num_segments;
+    int ghost_pointer;
     int score;
-    point_wide segments[ACTIVE_AREA];
+    point segments[ACTIVE_AREA];
 } snake;
 
 #endif
