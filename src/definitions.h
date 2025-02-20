@@ -13,10 +13,10 @@
 
 /* Main game-related definitions */
 #define                 DEBUG 1
-#define           PARTS_START 1
+#define           PARTS_START 3
 #define             GAME_WAIT 100000
-#define        BOUNDARY_WIDTH 8 /* Must be even */
-#define       BOUNDARY_HEIGHT 5
+#define        BOUNDARY_WIDTH 32 /* Must be even */
+#define       BOUNDARY_HEIGHT 16
 #define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
 #define BOUNDARY_WIDTH_ACTUAL (BOUNDARY_WIDTH / 2)
 
@@ -45,11 +45,12 @@
 #define         ON "h"
 #define        OFF "l"
 
-#define fmt_info  ESC "38;5;0;48;5;251m"
-#define fmt_clear ESC "0m"
+#define FMT_INFO  ESC "38;5;0;48;5;251m"
+#define FMT_CLEAR ESC "0m"
 
 /* Sprites */ 
-#define SPRITE_SNAKE          "██"
+#define SPRITE_SNAKE_HEAD     "██"
+#define SPRITE_SNAKE_BODY     ESC "38;5;244m" SPRITE_SNAKE_HEAD FMT_CLEAR
 #define SPRITE_CRASH          "░░"
 #define SPRITE_APPLE          "()"
 #define SPRITE_CLEAR          "  "

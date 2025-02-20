@@ -71,15 +71,17 @@ void init_bounds(point_u* p, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 
 void init_snake(snake* s, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
+    int offset       = (PARTS_START * 2);
     s->ghost_pointer = PARTS_START;
-    s->score        = 0;
+    s->score         = 0;
 
-    init_point(&s->segments[0], 2, BOUNDARY_HEIGHT / 2);
+    init_point(&s->segments[0], offset, BOUNDARY_HEIGHT / 2);
 
     for (int i = 1; i <= s->ghost_pointer; i++) {
-        s->segments[i].x = s->segments[i - 1].x;
+        s->segments[i].x = s->segments[i - 1].x - 2;
         s->segments[i].y = s->segments[i - 1].y;
     }
+    
     for (int i = 0; i < s->ghost_pointer; i++) {
         c[s->segments[i].x][s->segments[i].y] = COLLISION_BAD;
     }
