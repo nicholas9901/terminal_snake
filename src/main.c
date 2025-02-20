@@ -20,7 +20,7 @@ int main()
     init_snake(&snake, collision);
     init_apple(&apple, collision);
 
-    draw_sprites(&snake);
+    draw_sprites(&snake, 1);
     draw_apple(&apple);
     draw_bounds(bounds, PERIMETER_SIZE);
     draw_controls();

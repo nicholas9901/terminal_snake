@@ -117,6 +117,7 @@ void update_apple(point* a, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 void add_segment(snake* s)
 {
     if (s->ghost_pointer == ACTIVE_AREA) { exit(0); }
+    new_segment_added = 1;
     s->ghost_pointer++;
     point* tail_1 = &(s->segments[s->ghost_pointer]);
     point* tail_2 = &(s->segments[s->ghost_pointer - 1]);
@@ -170,16 +171,22 @@ int move_snake(
     does not have collision
     */
     uint8_t* collision_pos;
-    uint8_t* collision_pos_tail;
-    uint8_t  done = 0;
+    uint8_t  done  = 0;
+    uint8_t  clear = 1;
 
     for (int i = s->ghost_pointer; i > 0; i--) {
         s->segments[i].x = s->segments[i - 1].x;
         s->segments[i].y = s->segments[i - 1].y;
     }
 
-    c[s->segments[s->ghost_pointer].x]
-     [s->segments[s->ghost_pointer].y] = COLLISION_NONE;
+    if (!new_segment_added) {
+        c[s->segments[s->ghost_pointer].x]
+         [s->segments[s->ghost_pointer].y] = COLLISION_NONE;
+    }
+    else {
+        new_segment_added = 0;
+        clear = 0;
+    }
     
     while (!done) {
         switch(key_curr) {
@@ -208,25 +215,21 @@ int move_snake(
     /* Extra tail adjustment for add_segment case */
     *key_prev          = key_curr;
     collision_pos      = &(c[s->segments[0].x][s->segments[0].y]);
-    collision_pos_tail = &(c[s->segments[s->ghost_pointer - 1].x]
-                            [s->segments[s->ghost_pointer - 1].y]);
 
     switch (*collision_pos) {
         case COLLISION_NONE:
             *collision_pos = COLLISION_BAD;
-            *collision_pos_tail = COLLISION_BAD;
-            draw_sprites(s);
+            draw_sprites(s, clear);
             break;
         case COLLISION_APPLE:   
             *collision_pos = COLLISION_BAD;
-            *collision_pos_tail = COLLISION_BAD;
             s->score++;
             add_segment(s);
-            draw_sprites(s);
+            draw_sprites(s, clear);
             update_apple(a, c);
             break; 
         case COLLISION_BAD:
-            draw_sprites(s);
+            draw_sprites(s, clear);
             return 0;
         default:
             exit(1);

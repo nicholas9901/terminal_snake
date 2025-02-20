@@ -2,6 +2,8 @@
 
 struct termios initial;
 
+uint8_t new_segment_added = 0;
+
 int 
     width, 
     height, 

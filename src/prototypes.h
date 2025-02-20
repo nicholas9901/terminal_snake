@@ -6,6 +6,8 @@
 /* External variables */
 extern struct termios initial;
 
+extern uint8_t new_segment_added;
+
 extern int 
     width, 
     height, 
@@ -42,7 +44,7 @@ int move_snake(
 );
 
 /* draw.c */
-void draw_sprites(snake*);
+void draw_sprites(snake*, uint8_t);
 void draw_apple(point*);
 void draw_bounds(point_u*, int);
 void draw_controls();

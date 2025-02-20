@@ -12,7 +12,7 @@
 
 
 /* Main game-related definitions */
-#define                 DEBUG 1
+#define                 DEBUG 0
 #define           PARTS_START 3
 #define             GAME_WAIT 100000
 #define        BOUNDARY_WIDTH 32 /* Must be even */
@@ -37,7 +37,7 @@
 #define POINT_U_WIDE_LENGTH 8 /* Fits 2 unicode characters */
 
 // ANSI ESCape codes
-#define        ESC "\x1b["    
+#define        ESC "\e["    
 #define         YX "%d;%dH"    /* Terminal coordinates */
 #define TERM_CLEAR ESC "2J"     
 #define    ALT_BUF ESC "?1049"

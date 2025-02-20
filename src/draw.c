@@ -1,6 +1,6 @@
 #include "prototypes.h"
 
-void draw_sprites(snake* s) 
+void draw_sprites(snake* s, uint8_t clear) 
 {
 #if DEBUG /* Print the location of each segment */
     printf(ESC "0;0H");
@@ -8,16 +8,13 @@ void draw_sprites(snake* s)
         printf("(%d,%d)", s->segments[i].x, s->segments[i].y);
     }
 #endif
-    printf(
-        ESC YX SPRITE_CLEAR, 
-        s->segments[s->ghost_pointer].y + top_bound_adj, 
-        s->segments[s->ghost_pointer].x + left_bound_adj_snk
-    );
-    printf( /* Extra print for add_segment case */
-        ESC YX SPRITE_SNAKE_BODY, 
-        s->segments[s->ghost_pointer - 1].y + top_bound_adj, 
-        s->segments[s->ghost_pointer - 1].x + left_bound_adj_snk
-    );
+    if (clear) {
+        printf(
+            ESC YX SPRITE_CLEAR, 
+            s->segments[s->ghost_pointer].y + top_bound_adj, 
+            s->segments[s->ghost_pointer].x + left_bound_adj_snk
+        );    
+    }
     printf(
         ESC YX SPRITE_SNAKE_BODY, 
         s->segments[1].y + top_bound_adj, 
