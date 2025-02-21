@@ -1,26 +1,27 @@
-EXE     = snake
-OBJS    = main.o point.o startup.o draw.o
-SDIR    = src
-HEADERS = $(SDIR)/prototypes.h $(SDIR)/definitions.h 
-LD      = clang
-FLAGS   = -g
+DIR_BUILD = build
+DIR_SRC   = src
+EXE       = $(DIR_BUILD)/snake
+OBJS      = $(DIR_BUILD)/main.o $(DIR_BUILD)/point.o $(DIR_BUILD)/startup.o $(DIR_BUILD)/draw.o
+HEADERS   = $(DIR_SRC)/prototypes.h $(DIR_SRC)/definitions.h 
+LD        = clang
+FLAGS     = -g
 
 all: $(EXE)
 
 $(EXE): $(OBJS)
-	$(LD) $(FLAGS) $(OBJS) -o $(EXE)
+	$(LD) $(FLAGS) $(OBJS) -o $@
 
-main.o: $(SDIR)/main.c startup.o point.o draw.o $(HEADERS)
-	$(LD) -c $(FLAGS) $(SDIR)/main.c
+$(DIR_BUILD)/main.o: $(DIR_SRC)/main.c $(DIR_BUILD)/startup.o $(DIR_BUILD)/point.o $(DIR_BUILD)/draw.o $(HEADERS)
+	$(LD) -c $(FLAGS) $< -o $@
 
-point.o: $(SDIR)/point.c startup.o $(HEADERS)
-	$(LD) -c $(FLAGS) $(SDIR)/point.c
+$(DIR_BUILD)/point.o: $(DIR_SRC)/point.c $(DIR_BUILD)/startup.o $(HEADERS)
+	$(LD) -c $(FLAGS) $< -o $@
 
-draw.o: $(SDIR)/draw.c startup.o $(HEADERS)
-	$(LD) -c $(FLAGS) $(SDIR)/draw.c
+$(DIR_BUILD)/draw.o: $(DIR_SRC)/draw.c $(DIR_BUILD)/startup.o $(HEADERS)
+	$(LD) -c $(FLAGS) $< -o $@
 
-startup.o: $(SDIR)/startup.c $(HEADERS)
-	$(LD) -c $(FLAGS) $(SDIR)/startup.c
+$(DIR_BUILD)/startup.o: $(DIR_SRC)/startup.c $(HEADERS)
+	$(LD) -c $(FLAGS) $< -o $@
 
 clean:
 	rm -f $(EXE) *.o

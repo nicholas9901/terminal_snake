@@ -1,6 +1,3 @@
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -98,5 +95,3 @@ typedef struct snake {
     int score;
     point segments[ACTIVE_AREA];
 } snake;
-
-#endif
