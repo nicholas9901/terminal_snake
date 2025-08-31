@@ -30,17 +30,17 @@ void draw_sprites(snake* s, uint8_t clear)
 
 void draw_apple(point* a)
 {
-    printf(ESC YX SPRITE_APPLE, a->y + top_bound_adj, a->x + left_bound_adj_snk);
+  printf(ESC YX SPRITE_APPLE, a->y + top_bound_adj, a->x + left_bound_adj_snk);
 }
 
 void draw_bounds(point* bounds, int perimeter) 
 {
-    for (int i = 0; i < perimeter; i++) {
-        printf(ESC YX "%s", bounds[i].y, bounds[i].x, SPRITE_BOUNDARY);
-    }
+  for (int i = 0; i < perimeter; i++) {
+    printf(ESC YX "%s", bounds[i].y, bounds[i].x, SPRITE_BOUNDARY);
+  }
 }
 
 void draw_controls() 
 {
-    printf(ESC "%d;1H" FMT_INFO "Quit: [q] Pause: [e]" FMT_CLEAR, height);
+  printf(ESC "%d;1H" FMT_INFO "Quit: [q] Pause: [e]" FMT_CLEAR, height);
 }
