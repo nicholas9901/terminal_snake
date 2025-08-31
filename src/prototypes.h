@@ -9,16 +9,16 @@ extern struct termios initial;
 extern uint8_t new_segment_added;
 
 extern int 
-    width, 
-    height, 
-    mid_x,
-    apple_x_start,
-    mid_y,
-    left_bound_adj,
-    left_bound_adj_snk,
-    right_bound_adj,
-    top_bound_adj,
-    bottom_bound_adj;
+  width, 
+  height, 
+  mid_x,
+  apple_x_start,
+  mid_y,
+  left_bound_adj,
+  left_bound_adj_snk,
+  right_bound_adj,
+  top_bound_adj,
+  bottom_bound_adj;
 
 /* startup.c */
 void clean();
@@ -29,7 +29,7 @@ void init_term();
 /* point.c */
 void init_point(point*, int, int);
 void init_point_u(point_u*, int, int, char*);
-void init_bounds(point_u*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
+void init_bounds(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void init_snake(snake*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void init_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 
@@ -37,16 +37,16 @@ void update_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void add_segment(snake*);
 char get_movement_key(char* key_curr);
 int move_snake(
-    snake*, 
-    point*, 
-    uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
-    char, char* 
+  snake*, 
+  point*, 
+  uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
+  char, char* 
 );
 
 /* draw.c */
 void draw_sprites(snake*, uint8_t);
 void draw_apple(point*);
-void draw_bounds(point_u*, int);
+void draw_bounds(point*, int);
 void draw_controls();
 
 #endif

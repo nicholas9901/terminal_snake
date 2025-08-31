@@ -24,6 +24,6 @@ $(DIR_BUILD)/startup.o: $(DIR_SRC)/startup.c $(HEADERS)
 	$(LD) -c $(FLAGS) $< -o $@
 
 clean:
-	rm -f $(EXE) *.o
+	rm -f $(EXE) $(OBJS)
 
 .PHONY: all default
