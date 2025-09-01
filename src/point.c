@@ -18,20 +18,20 @@ void init_bounds(point* p, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
   /* stored as relative coordinates since boundaries don't change */
   int points_index = 0;
   
-  for (int i = left_bound_adj; i <= right_bound_adj; i += 2) {
+  for (int i = left_bound_adj + 1; i < right_bound_adj - 1; i += 2) {
     /* Top Border */
-    init_point(&p[++points_index], i, top_bound_adj);
+    init_point(&p[points_index++], i, top_bound_adj);
 
     /* Bottom Border */
-    init_point(&p[++points_index], i, bottom_bound_adj);
+    init_point(&p[points_index++], i, bottom_bound_adj);
   } 
 
-  for (int i = top_bound_adj + 1; i < bottom_bound_adj; i++) {
+  for (int i = top_bound_adj; i < bottom_bound_adj + 10; i++) {
     /* Left border */
-    init_point(&p[++points_index], left_bound_adj, i);
+    init_point(&p[points_index++], left_bound_adj_snk, i);
 
     /* Right border */
-    init_point(&p[++points_index], right_bound_adj, i);
+    init_point(&p[points_index++], right_bound_adj, i);
   }
 
   /*
