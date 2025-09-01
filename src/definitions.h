@@ -23,9 +23,9 @@
 #define     LEFT_BOUND 1
 #define    RIGHT_BOUND BOUNDARY_WIDTH
 #define PERIMETER_SIZE ((2 * BOUNDARY_WIDTH_ACTUAL) + (2 * BOUNDARY_HEIGHT) - 2)
-#define  ACTIVE_WIDTH ((BOUNDARY_WIDTH - 2) / 2)
-#define ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
-#define   ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
+#define   ACTIVE_WIDTH ((BOUNDARY_WIDTH - 2) / 2)
+#define  ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
+#define    ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
 
 /* Buffer lengths */
 #define      POINT_U_LENGTH 4 /* Fits 1 unicode character */
@@ -44,13 +44,13 @@
 #define FMT_CLEAR ESC "0m"
 
 /* Sprites */ 
-#define SPRITE_BLOCK          "██"
-#define SPRITE_SNAKE_HEAD     SPRITE_BLOCK
-#define SPRITE_SNAKE_BODY     ESC "38;5;244m" SPRITE_BLOCK FMT_CLEAR
-#define SPRITE_CRASH          "░░"
-#define SPRITE_APPLE          ESC "0;31m" SPRITE_BLOCK FMT_CLEAR
-#define SPRITE_BOUNDARY       ESC "38;5;237m" SPRITE_BLOCK FMT_CLEAR
-#define SPRITE_CLEAR          "  "
+#define      SPRITE_BLOCK "██"
+#define SPRITE_SNAKE_HEAD SPRITE_BLOCK
+#define SPRITE_SNAKE_BODY ESC "38;5;244m" SPRITE_BLOCK FMT_CLEAR
+#define      SPRITE_CRASH "░░"
+#define      SPRITE_APPLE ESC "0;31m" SPRITE_BLOCK FMT_CLEAR
+#define   SPRITE_BOUNDARY ESC "38;5;237m" SPRITE_BLOCK FMT_CLEAR
+#define      SPRITE_CLEAR "  "
 
 /* Enumerated types */
 typedef enum { 
