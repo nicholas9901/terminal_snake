@@ -1,6 +1,6 @@
 DIR_BUILD = build
 DIR_SRC   = src
-EXE       = $(DIR_BUILD)/snake
+EXE       = $(DIR_BUILD)/terminal_snake
 OBJS      = $(DIR_BUILD)/main.o $(DIR_BUILD)/point.o $(DIR_BUILD)/startup.o $(DIR_BUILD)/draw.o
 HEADERS   = $(DIR_SRC)/prototypes.h $(DIR_SRC)/definitions.h 
 LD        = clang
