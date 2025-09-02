@@ -8,8 +8,9 @@ int
   width, 
   height, 
   mid_x,
-  apple_x_start,
   mid_y,
+  apple_x_start,
+  perimeter,
   left_bound_adj,
   left_bound_adj_snk,
   right_bound_adj,
@@ -18,12 +19,12 @@ int
 
 void clean() {
 	puts(
-        ALT_BUF ON
-        TERM_CLEAR
-	    CURSOR ON
-        ALT_BUF OFF
-        "\n"
-    );
+	  ALT_BUF ON
+	  TERM_CLEAR
+		CURSOR ON
+	  ALT_BUF OFF
+	  "\n"
+  );
 	tcsetattr(1, TCSANOW, &initial);
 }
 
@@ -33,8 +34,9 @@ void init_canvas() {
   width              = ws.ws_col;
   height             = ws.ws_row;
   mid_x              = width / 2;
-  apple_x_start      = mid_x % 2 == 0 ? mid_x +1 : mid_x;
   mid_y              = height / 2;
+  apple_x_start      = mid_x % 2 == 0 ? mid_x +1 : mid_x;
+  perimeter          = PERIMETER_SIZE;
   left_bound_adj     = LEFT_BOUND   + mid_x - (BOUNDARY_WIDTH  / 2);
   left_bound_adj_snk = left_bound_adj - 1;
   right_bound_adj    = RIGHT_BOUND  + mid_x - (BOUNDARY_WIDTH  / 2);

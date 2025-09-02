@@ -12,8 +12,9 @@ extern int
   width, 
   height, 
   mid_x,
-  apple_x_start,
   mid_y,
+  apple_x_start,
+  perimeter,
   left_bound_adj,
   left_bound_adj_snk,
   right_bound_adj,
@@ -46,7 +47,7 @@ int move_snake(
 /* draw.c */
 void draw_snake(snake*, uint8_t);
 void draw_apple(point*);
-void draw_bounds(point*, int);
+void draw_bounds(point*);
 void draw_controls();
 void draw_score(snake*);
 

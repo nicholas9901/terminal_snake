@@ -12,6 +12,7 @@
 #define                 DEBUG 0
 #define           PARTS_START 3
 #define             GAME_WAIT 100000
+#define          POLLING_RATE 10000
 #define        BOUNDARY_WIDTH 32 /* Must be even */
 #define       BOUNDARY_HEIGHT 16
 #define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
@@ -42,6 +43,9 @@
 
 #define FMT_INFO  ESC "38;5;0;48;5;7m"
 #define FMT_CLEAR ESC "0m"
+
+/* Key Codes */
+#define KEY_NONE '0'
 
 /* Sprites */ 
 #define      SPRITE_BLOCK "██"

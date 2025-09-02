@@ -32,7 +32,7 @@ void draw_apple(point* a)
   printf(ESC YX SPRITE_APPLE, a->y + top_bound_adj, a->x + left_bound_adj_snk);
 }
 
-void draw_bounds(point* bounds, int perimeter) 
+void draw_bounds(point* bounds) 
 {
   for (int i = 0; i < perimeter; i++) {
     printf(ESC YX "%s", bounds[i].y, bounds[i].x, SPRITE_BOUNDARY);

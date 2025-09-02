@@ -22,7 +22,7 @@ int main()
 
   draw_snake(&snake, 1);
   draw_apple(&apple);
-  draw_bounds(bounds, PERIMETER_SIZE);
+  draw_bounds(bounds);
   draw_score(&snake);
   draw_controls();
 
@@ -34,7 +34,7 @@ int main()
 #endif
 
   char 
-    key_main = '0',
+    key_main = KEY_NONE,
     key_curr = 'd',
     key_prev = 'd';
     
@@ -46,18 +46,26 @@ int main()
       case 'q':
         exit(0);
       case 'e':
-        key_main = '0';
-        printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  1, width - 6);
+        key_main = KEY_NONE;
+        printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
         while(key_main != 'e') {
-            read(0, &key_main, 1);
-            if (key_main == 'q') {
-                exit(0);
-            }
-            usleep(10000);
+          read(0, &key_main, 1);
+          if (key_main == 'q') exit(0);
+          usleep(POLLING_RATE);
         }
-        printf(ESC YX FMT_INFO "      " FMT_CLEAR, 1, width - 6); 
-        key_main = '0';
+        printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
+        key_main = KEY_NONE;
         break;
+      case ' ':
+        key_main = KEY_NONE;
+        puts(ALT_BUF OFF);
+        while(key_main != ' ') {
+          read(0, &key_main, 1);
+          if (key_main == 'q') exit(0);
+          usleep(POLLING_RATE);
+        }
+        puts(ALT_BUF ON);
+        key_main = KEY_NONE;
     }
 
 #if DEBUG
@@ -92,7 +100,7 @@ int main()
   printf(ESC "%d;%dHGame Over!", bottom_bound_adj + 2, left_bound_adj);
   while (key_main != 'q' && key_main != '\n') {
     read(0, &key_main, 1);
-    usleep(10000);
+    usleep(POLLING_RATE);
   }
   clean();
 }
