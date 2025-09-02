@@ -40,7 +40,7 @@
 #define         ON "h"
 #define        OFF "l"
 
-#define FMT_INFO  ESC "38;5;0;48;5;251m"
+#define FMT_INFO  ESC "38;5;0;48;5;7m"
 #define FMT_CLEAR ESC "0m"
 
 /* Sprites */ 

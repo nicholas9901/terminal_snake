@@ -1,6 +1,6 @@
 #include "prototypes.h"
 
-void draw_sprites(snake* s, uint8_t clear) 
+void draw_snake(snake* s, uint8_t clear) 
 {
 #if DEBUG /* Print the location of each segment */
   printf(ESC "0;0H");
@@ -25,7 +25,6 @@ void draw_sprites(snake* s, uint8_t clear)
     s->segments[0].y + top_bound_adj, 
     s->segments[0].x + left_bound_adj_snk
   );
-  printf(ESC YX "Score: %d", top_bound_adj - 2, left_bound_adj, s->score);
 }
 
 void draw_apple(point* a)
@@ -40,7 +39,24 @@ void draw_bounds(point* bounds, int perimeter)
   }
 }
 
+void draw_score(snake* s)
+{
+  printf(ESC "%d;1H" FMT_INFO " Score: %d", 1, s->score);
+
+  for (int i = 0; i < width - 9; i++) { /* Length of the top ribbon */
+    printf(" ");
+  }
+  printf(FMT_CLEAR); 
+}
+
 void draw_controls() 
 {
-  printf(ESC "%d;1H" FMT_INFO "Quit: [q] Pause: [e]" FMT_CLEAR, height);
+  printf(ESC "%d;1H" FMT_INFO " Quit: [q] Pause: [e] Work: [Space]", height);
+  
+  for (int i = 0; i < width - 35; i++) { /* Length of the bottom ribbon */
+    printf(" ");
+  }
+  
+  printf(FMT_CLEAR); 
 }
+

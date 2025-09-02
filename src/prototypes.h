@@ -44,9 +44,10 @@ int move_snake(
 );
 
 /* draw.c */
-void draw_sprites(snake*, uint8_t);
+void draw_snake(snake*, uint8_t);
 void draw_apple(point*);
 void draw_bounds(point*, int);
 void draw_controls();
+void draw_score(snake*);
 
 #endif

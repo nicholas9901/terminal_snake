@@ -20,9 +20,10 @@ int main()
   init_snake(&snake, collision);
   init_apple(&apple, collision);
 
-  draw_sprites(&snake, 1);
+  draw_snake(&snake, 1);
   draw_apple(&apple);
   draw_bounds(bounds, PERIMETER_SIZE);
+  draw_score(&snake);
   draw_controls();
 
 #if DEBUG
@@ -33,21 +34,20 @@ int main()
 #endif
 
   char 
-    key_main   = '0',
-    key_m_curr = 'd',
-    key_m_prev = 'd';
+    key_main = '0',
+    key_curr = 'd',
+    key_prev = 'd';
+    
   while(1) {
     read(0, &key_main, 1);
-    key_m_curr = get_movement_key(&key_main);
+    key_curr = get_movement_key(&key_main);
 
     switch(key_main) {
       case 'q':
         exit(0);
       case 'e':
         key_main = '0';
-        char str[] = "Paused";
-        int pos_x = right_bound_adj - strlen(str) + 1;
-        printf(ESC YX "Paused",  top_bound_adj - 2, pos_x);
+        printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  1, width - 6);
         while(key_main != 'e') {
             read(0, &key_main, 1);
             if (key_main == 'q') {
@@ -55,7 +55,7 @@ int main()
             }
             usleep(10000);
         }
-        printf(ESC YX "      ",  top_bound_adj - 2, pos_x);
+        printf(ESC YX FMT_INFO "      " FMT_CLEAR, 1, width - 6); 
         key_main = '0';
         break;
     }
@@ -70,10 +70,10 @@ int main()
         break;
     }
 #endif
-
-    if (!move_snake(&snake, &apple, collision, key_m_curr, &key_m_prev)) {
+   if (!move_snake(&snake, &apple, collision, key_curr, &key_prev)) {
       printf(ESC YX "%s", snake.segments[0].y + top_bound_adj, snake.segments[0].x + left_bound_adj_snk, SPRITE_CRASH);
       break;
+      
     }
 
 #if DEBUG

@@ -154,7 +154,7 @@ int move_snake(
 ) 
 {
   /*
-  The tail of the snake is cleared in each call of `draw_sprites()` so it 
+  The tail of the snake is cleared in each call of `draw_snake()` so it 
   does not have collision
   */
   uint8_t* collision_pos;
@@ -205,17 +205,18 @@ int move_snake(
   switch (*collision_pos) {
     case COLLISION_NONE:
       *collision_pos = COLLISION_BAD;
-      draw_sprites(s, clear);
+      draw_snake(s, clear);
       break;
     case COLLISION_APPLE:   
       *collision_pos = COLLISION_BAD;
       s->score++;
       add_segment(s);
-      draw_sprites(s, clear);
+      draw_snake(s, clear);
+      printf(ESC YX FMT_INFO "%d", 1, 9,  s->score);
       update_apple(a, c);
       break; 
     case COLLISION_BAD:
-      draw_sprites(s, clear);
+      draw_snake(s, clear);
       return 0;
     default:
       exit(1);
