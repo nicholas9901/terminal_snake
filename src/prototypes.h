@@ -45,6 +45,13 @@ int move_snake(
 );
 
 /* draw.c */
+#define draw_all(snake, apple, bounds) \
+  draw_snake(snake, 1);                \
+  draw_apple(apple);                   \
+  draw_bounds(bounds);                 \
+  draw_score(snake);                   \
+  draw_controls()                      \
+  
 void draw_snake(snake*, uint8_t);
 void draw_apple(point*);
 void draw_bounds(point*);

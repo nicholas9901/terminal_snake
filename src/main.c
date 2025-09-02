@@ -20,11 +20,7 @@ int main()
   init_snake(&snake, collision);
   init_apple(&apple, collision);
 
-  draw_snake(&snake, 1);
-  draw_apple(&apple);
-  draw_bounds(bounds);
-  draw_score(&snake);
-  draw_controls();
+  draw_all(&snake, &apple, bounds);
 
 #if DEBUG
   printf(ESC "2;0Hwidth:%d height:%d %d %d", width, height, mid_x, mid_y);
@@ -65,6 +61,7 @@ int main()
           usleep(POLLING_RATE);
         }
         puts(ALT_BUF ON);
+        draw_all(&snake, &apple, bounds);
         key_main = KEY_NONE;
     }
 
