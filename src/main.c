@@ -10,7 +10,10 @@ int main()
   point apple;
   point bounds[PERIMETER_SIZE];
   byte collision[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT] = {0};
-
+  byte paused   = 0;
+  char key_curr = 'd';
+  char key_prev = key_curr;
+  
   srand(time(NULL));
 
   init_canvas();
@@ -28,11 +31,6 @@ int main()
 #else
   fcntl(0, F_SETFL, O_NONBLOCK);
 #endif
-
-  /* The snake starts by going to the right */
-  char 
-    key_curr = 'd',
-    key_prev = 'd';
 
   /* Main loop */    
   while(1) {
@@ -61,31 +59,37 @@ int main()
 
       /* Menu-related inputs */
       case 'q': /* Quit */
-        exit(0);
+        state_quit:
+          exit(0);
       case 'e': /* Pause */
-        key_curr = KEY_NONE;
-        printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
-        while(key_curr != 'e') {
-          read(0, &key_curr, 1);
-          if (key_curr == 'q') exit(0);
-          usleep(POLLING_RATE);
-        }
-        printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
-        key_curr = KEY_NONE;
-        break;
+        state_pause:
+          paused   = 1;
+          key_curr = KEY_NONE;
+          printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
+          while(key_curr != 'e') {
+            read(0, &key_curr, 1);
+            if (key_curr == 'q')      goto state_quit;
+            else if (key_curr == ' ') goto state_work;
+            usleep(POLLING_RATE);
+          }
+          printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
+          key_curr = KEY_NONE;
+          paused   = 0;
+          break;
       case ' ': /* Work pause (pause and switch to the alternate buffer) */
-        key_curr = KEY_NONE;
-        puts(ALT_BUF OFF);
-        while(key_curr == KEY_NONE) {
-          read(0, &key_curr, 1);
-          if (key_curr == 'q') exit(0);
-          usleep(POLLING_RATE);
-        }
-        puts(ALT_BUF ON);
-        draw_all(&snake, &apple, bounds);
-        if (key_curr == 'e') continue;
-        else if (key_curr == ' ') key_curr = KEY_NONE;
-        continue;
+        state_work:
+          key_curr = KEY_NONE;
+          puts(ALT_BUF OFF);
+          while(key_curr == KEY_NONE) {
+            read(0, &key_curr, 1);
+            if (key_curr == 'q') exit(0);
+            usleep(POLLING_RATE);
+          }
+          puts(ALT_BUF ON);
+          draw_all(&snake, &apple, bounds);
+          if (key_curr == 'e' || paused) goto state_pause;
+          else if (key_curr == ' ') key_curr = KEY_NONE;
+          break;
     }
 
 #if DEBUG
