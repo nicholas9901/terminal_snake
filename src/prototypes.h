@@ -29,7 +29,6 @@ void init_term();
 
 /* point.c */
 void init_point(point*, int, int);
-void init_point_u(point_u*, int, int, char*);
 void init_bounds(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void init_snake(snake*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void init_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);

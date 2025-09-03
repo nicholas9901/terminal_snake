@@ -28,10 +28,6 @@
 #define  ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
 #define    ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
 
-/* Buffer lengths */
-#define      POINT_U_LENGTH 4 /* Fits 1 unicode character */
-#define POINT_U_WIDE_LENGTH 8 /* Fits 2 unicode characters */
-
 /* ANSI escape codes */
 #define        ESC "\e["
 #define         YX "%d;%dH"    /* Terminal coordinates */
@@ -78,18 +74,6 @@ typedef struct point {
   int x;
   int y;
 } point;
-
-typedef struct point_u {
-  int x;
-  int y;
-  char icon[POINT_U_LENGTH];
-} point_u;
-
-typedef struct point_u_wide {
-  int x;
-  int y;
-  char icon[POINT_U_WIDE_LENGTH];
-} point_u_wide;
 
 typedef struct snake {
   int ghost_pointer;

@@ -6,16 +6,9 @@ void init_point(point* p, int x, int y)
   p->y = y;
 }
 
-void init_point_u(point_u* p, int x, int y, char* icon)
-{
-  p->x = x;
-  p->y = y;
-  strcpy(p->icon, icon);
-}
-
 void init_bounds(point* p, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
-  /* stored as relative coordinates since boundaries don't change */
+  /* Stored as relative coordinates since boundaries don't change */
   int points_index = 0;
   
   for (int i = left_bound_adj + 1; i < right_bound_adj - 1; i += 2) {
