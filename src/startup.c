@@ -45,10 +45,10 @@ void init_canvas() {
 }
 
 void init_term() {
+	struct termios current;
 	setvbuf(stdout, NULL, _IONBF, 0);
-	struct termios t;
-	tcgetattr(1, &t);
-	initial = t;
+	tcgetattr(1, &current);
+	initial = current;
 	atexit(clean);
 	signal(SIGTERM, exit);
 	signal(SIGINT, exit);
@@ -56,6 +56,6 @@ void init_term() {
         ALT_BUF ON 
         CURSOR OFF
     );
-	t.c_lflag &= (~ECHO & ~ICANON);
-	tcsetattr(1, TCSANOW, &t);
+	current.c_lflag &= (~ECHO & ~ICANON);
+	tcsetattr(1, TCSANOW, &current);
 }
