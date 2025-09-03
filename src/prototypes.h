@@ -36,7 +36,6 @@ void init_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 
 void update_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void add_segment(snake*);
-char get_movement_key(char* key_curr);
 int move_snake(
   snake*, 
   point*, 
@@ -46,13 +45,14 @@ int move_snake(
 
 /* draw.c */
 #define draw_all(snake, apple, bounds) \
-  draw_snake(snake, 1);                \
+  draw_snake_all(snake);               \
   draw_apple(apple);                   \
   draw_bounds(bounds);                 \
   draw_score(snake);                   \
   draw_controls()                      \
   
 void draw_snake(snake*, uint8_t);
+void draw_snake_all(snake* s);
 void draw_apple(point*);
 void draw_bounds(point*);
 void draw_controls();

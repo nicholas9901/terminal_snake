@@ -45,7 +45,7 @@
 #define FMT_CLEAR ESC "0m"
 
 /* Key Codes */
-#define KEY_NONE '0'
+#define KEY_NONE -1
 
 /* Sprites */ 
 #define      SPRITE_BLOCK "██"
@@ -55,6 +55,9 @@
 #define      SPRITE_APPLE ESC "0;31m" SPRITE_BLOCK FMT_CLEAR
 #define   SPRITE_BOUNDARY ESC "38;5;237m" SPRITE_BLOCK FMT_CLEAR
 #define      SPRITE_CLEAR "  "
+
+/* Type */
+typedef unsigned char byte;
 
 /* Enumerated types */
 typedef enum { 

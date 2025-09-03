@@ -5,7 +5,7 @@ void draw_snake(snake* s, uint8_t clear)
 #if DEBUG /* Print the location of each segment */
   printf(ESC "0;0H");
   for (int i = 0; i <= s->ghost_pointer; i++) {
-      printf("(%d,%d)", s->segments[i].x, s->segments[i].y);
+    printf("(%d,%d)", s->segments[i].x, s->segments[i].y);
   }
 #endif
   if (clear) {
@@ -20,6 +20,22 @@ void draw_snake(snake* s, uint8_t clear)
     s->segments[1].y + top_bound_adj, 
     s->segments[1].x + left_bound_adj_snk
   );
+  printf(
+    ESC YX SPRITE_SNAKE_HEAD, 
+    s->segments[0].y + top_bound_adj, 
+    s->segments[0].x + left_bound_adj_snk
+  );
+}
+
+void draw_snake_all(snake* s) /* For redrawing the entire snake */
+{
+  for (int i = 1; i <= s->ghost_pointer - 1; i++) {
+    printf(
+      ESC YX SPRITE_SNAKE_BODY, 
+      s->segments[i].y + top_bound_adj, 
+      s->segments[i].x + left_bound_adj_snk
+    );
+  }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 
     s->segments[0].y + top_bound_adj, 

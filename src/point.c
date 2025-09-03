@@ -115,36 +115,6 @@ void add_segment(snake* s)
   tail_2->y = tail_3->y;
 }
 
-char get_movement_key(char* key_curr)
-{
-  switch(*key_curr) {
-    case '\x1b': // Arrow Keys
-      read(0, key_curr, 1);
-      read(0, key_curr, 1);
-      switch(*key_curr) {
-        case 'A': // Up
-          return 'w';
-        case 'B': // Down
-          return 's';
-        case 'C': // Right
-          return 'd';
-        case 'D': // Left
-          return 'a';
-      }
-      break;
-
-    case 'w':
-      return 'w';
-    case 's':
-      return 's';
-    case 'd':
-      return 'd';
-    case 'a':
-      return 'a';
-  }
-  return '0';
-}
-
 int move_snake(
   snake* s, 
   point* a, 
@@ -158,7 +128,6 @@ int move_snake(
   does not have collision
   */
   uint8_t* collision_pos;
-  uint8_t  done  = 0;
   uint8_t  clear = 1;
 
   for (int i = s->ghost_pointer; i > 0; i--) {
@@ -175,28 +144,23 @@ int move_snake(
     clear = 0;
   }
   
-  while (!done) {
+  read_key:
     switch(key_curr) {
       case 'w':
         s->segments[0].y--;
-        done = 1;
         break;
       case 's':
-        s->segments[0].y++;
-        done = 1;
+        s->segments[0].y++;        
         break;
       case 'a':
-        s->segments[0].x -= 2;
-        done = 1;
+        s->segments[0].x -= 2;        
         break;
       case 'd':
-        s->segments[0].x += 2;
-        done = 1;
+        s->segments[0].x += 2;        
         break;
       default:
         key_curr = *key_prev;
-        continue;
-      }
+        goto read_key;
   }
 
   *key_prev          = key_curr;

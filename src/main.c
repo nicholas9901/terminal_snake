@@ -29,44 +29,67 @@ int main()
   fcntl(0, F_SETFL, O_NONBLOCK);
 #endif
 
+  /* The snake starts by going to the right */
   char 
-    key_main = KEY_NONE,
     key_curr = 'd',
     key_prev = 'd';
-    
-  while(1) {
-    read(0, &key_main, 1);
-    key_curr = get_movement_key(&key_main);
 
-    switch(key_main) {
-      case 'q':
+  /* Main loop */    
+  while(1) {
+    read(0, &key_curr, 1);
+
+    /* Scan for each possible input */
+    switch(key_curr) {
+      
+      /* Movement-related inputs */
+      case '\x1b':            // Arrow Keys
+        read(0, & key_curr, 2); // Skip to the important part of the key code
+        switch(key_curr) {
+          case 'A':           // Up
+            key_curr = 'w';
+            break;
+          case 'B':           // Down
+            key_curr = 's';
+            break;
+          case 'C':           // Right
+            key_curr = 'd';
+            break;
+          case 'D':           // Left
+            key_curr = 'a';
+            break;
+        }
+
+      /* Menu-related inputs */
+      case 'q': /* Quit */
         exit(0);
-      case 'e':
-        key_main = KEY_NONE;
+      case 'e': /* Pause */
+        key_curr = KEY_NONE;
         printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
-        while(key_main != 'e') {
-          read(0, &key_main, 1);
-          if (key_main == 'q') exit(0);
+        while(key_curr != 'e') {
+          read(0, &key_curr, 1);
+          if (key_curr == 'q') exit(0);
           usleep(POLLING_RATE);
         }
         printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
-        key_main = KEY_NONE;
+        key_curr = KEY_NONE;
         break;
-      case ' ':
-        key_main = KEY_NONE;
+      case ' ': /* Work pause (pause and switch to the alternate buffer) */
+        key_curr = KEY_NONE;
         puts(ALT_BUF OFF);
-        while(key_main != ' ') {
-          read(0, &key_main, 1);
-          if (key_main == 'q') exit(0);
+        while(key_curr == KEY_NONE) {
+          read(0, &key_curr, 1);
+          if (key_curr == 'q') exit(0);
           usleep(POLLING_RATE);
         }
         puts(ALT_BUF ON);
         draw_all(&snake, &apple, bounds);
-        key_main = KEY_NONE;
+        if (key_curr == 'e') continue;
+        else if (key_curr == ' ') key_curr = KEY_NONE;
+        continue;
     }
 
 #if DEBUG
-    switch (key_main) {
+    switch (key_curr) {
       case 'n':
         add_segment(&snake);
         break;
@@ -94,9 +117,9 @@ int main()
     usleep(GAME_WAIT);
 #endif
   }
-  printf(ESC "%d;%dHGame Over!", bottom_bound_adj + 2, left_bound_adj);
-  while (key_main != 'q' && key_main != '\n') {
-    read(0, &key_main, 1);
+  printf(ESC YX FMT_INFO "Game Over" FMT_CLEAR, TOP_BOUND, width - 9);
+  while (key_curr != 'q' && key_curr != '\n') {
+    read(0, &key_curr, 1);
     usleep(POLLING_RATE);
   }
   clean();
