@@ -6,7 +6,7 @@
 /* External variables */
 extern struct termios initial;
 
-extern uint8_t new_segment_added;
+extern byte new_segment_added;
 
 extern int 
   width, 
@@ -29,17 +29,18 @@ void init_term();
 
 /* point.c */
 void init_point(point*, int, int);
-void init_bounds(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
-void init_snake(snake*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
-void init_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
+void init_bounds(point*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
+void init_snake(snake*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
+void init_apple(point*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 
-void update_apple(point*, uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
+void update_apple(point*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 void add_segment(snake*);
 int move_snake(
   snake*, 
   point*, 
-  uint8_t[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
-  char, char* 
+  byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
+  char,
+  char* 
 );
 
 /* draw.c */
@@ -50,7 +51,7 @@ int move_snake(
   draw_score(snake);                   \
   draw_controls()                      \
   
-void draw_snake(snake*, uint8_t);
+void draw_snake(snake*, byte);
 void draw_snake_all(snake* s);
 void draw_apple(point*);
 void draw_bounds(point*);

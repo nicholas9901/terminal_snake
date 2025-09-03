@@ -9,7 +9,7 @@ int main()
   snake snake;
   point apple;
   point bounds[PERIMETER_SIZE];
-  uint8_t collision[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT] = {0};
+  byte collision[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT] = {0};
 
   srand(time(NULL));
 

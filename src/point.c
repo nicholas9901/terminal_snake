@@ -6,7 +6,7 @@ void init_point(point* p, int x, int y)
   p->y = y;
 }
 
-void init_bounds(point* p, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void init_bounds(point* p, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
   /* Stored as relative coordinates since boundaries don't change */
   int points_index = 0;
@@ -49,7 +49,7 @@ void init_bounds(point* p, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
   }
 }
 
-void init_snake(snake* s, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void init_snake(snake* s, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
   int offset       = (PARTS_START * 2);
   s->ghost_pointer = PARTS_START;
@@ -67,14 +67,14 @@ void init_snake(snake* s, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
   }
 }
 
-void init_apple(point* a, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void init_apple(point* a, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
   int adjusted_x = (BOUNDARY_WIDTH / 2) % 2 == 1 ? (BOUNDARY_WIDTH / 2) + 1 : (BOUNDARY_WIDTH / 2);
   init_point(a, adjusted_x, BOUNDARY_HEIGHT / 2);
   c[adjusted_x][BOUNDARY_HEIGHT / 2] = COLLISION_APPLE;
 }
 
-void update_apple(point* a, uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void update_apple(point* a, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
   int x = ((rand() % ACTIVE_WIDTH) * 2) + 2;
   int y = (rand() % ACTIVE_HEIGHT) + 1;
@@ -111,7 +111,7 @@ void add_segment(snake* s)
 int move_snake(
   snake* s, 
   point* a, 
-  uint8_t c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT], 
+  byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT], 
   char key_curr, 
   char* key_prev
 ) 
@@ -120,8 +120,8 @@ int move_snake(
   The tail of the snake is cleared in each call of `draw_snake()` so it 
   does not have collision
   */
-  uint8_t* collision_pos;
-  uint8_t  clear = 1;
+  byte* collision_pos;
+  byte  clear = 1;
 
   for (int i = s->ghost_pointer; i > 0; i--) {
     s->segments[i].x = s->segments[i - 1].x;

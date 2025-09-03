@@ -1,6 +1,6 @@
 #include "prototypes.h"
 
-void draw_snake(snake* s, uint8_t clear) 
+void draw_snake(snake* s, byte clear) 
 {
 #if DEBUG /* Print the location of each segment */
   printf(ESC "0;0H");
