@@ -53,9 +53,8 @@ void init_term() {
 	signal(SIGTERM, exit);
 	signal(SIGINT, exit);
 	puts(
-        ALT_BUF ON 
-        CURSOR OFF
-    );
+	  ALT_BUF ON 
+	  CURSOR OFF);
 	current.c_lflag &= (~ECHO & ~ICANON);
 	tcsetattr(1, TCSANOW, &current);
 }

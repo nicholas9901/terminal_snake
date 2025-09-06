@@ -28,6 +28,9 @@
 #define  ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
 #define    ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
 
+/* Key Codes */
+#define KEY_NONE -1
+
 /* ANSI escape codes */
 #define        ESC "\e["
 #define         YX "%d;%dH"    /* Terminal coordinates */
@@ -36,21 +39,24 @@
 #define     CURSOR ESC "?25"
 #define         ON "h"
 #define        OFF "l"
+#define   FG_BLACK "38;5;0"
+#define   BG_WHITE "48;5;7"
+#define     BG_RED "48;5;1"
+#define    BG_BLUE "48;5;4"
+#define       WITH ";"
 
-#define FMT_INFO  ESC "38;5;0;48;5;7m"
+#define   FMT_END "m"
+#define  FMT_INFO ESC FG_BLACK WITH BG_WHITE FMT_END
 #define FMT_CLEAR ESC "0m"
 
-/* Key Codes */
-#define KEY_NONE -1
-
 /* Sprites */ 
-#define      SPRITE_BLOCK "██"
-#define SPRITE_SNAKE_HEAD SPRITE_BLOCK
-#define SPRITE_SNAKE_BODY ESC "38;5;244m" SPRITE_BLOCK FMT_CLEAR
-#define      SPRITE_CRASH "░░"
-#define      SPRITE_APPLE ESC "0;31m" SPRITE_BLOCK FMT_CLEAR
-#define   SPRITE_BOUNDARY ESC "38;5;237m" SPRITE_BLOCK FMT_CLEAR
-#define      SPRITE_CLEAR "  "
+#define      SPRITE_BLOCK "  "
+#define SPRITE_SNAKE_HEAD ESC BG_WHITE FMT_END SPRITE_BLOCK FMT_CLEAR
+#define SPRITE_SNAKE_BODY ESC "48;5;244m" SPRITE_BLOCK FMT_CLEAR
+#define      SPRITE_CRASH ESC BG_BLUE FMT_END SPRITE_BLOCK FMT_CLEAR
+#define      SPRITE_APPLE ESC BG_RED FMT_END SPRITE_BLOCK FMT_CLEAR
+#define   SPRITE_BOUNDARY ESC "48;5;237m" SPRITE_BLOCK FMT_CLEAR
+#define      SPRITE_CLEAR SPRITE_BLOCK FMT_CLEAR
 
 /* Type */
 typedef unsigned char byte;

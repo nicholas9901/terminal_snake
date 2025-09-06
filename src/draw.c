@@ -10,7 +10,7 @@ void draw_snake(snake* s, byte clear)
 #endif
   if (clear) {
     printf(
-      ESC YX SPRITE_CLEAR, 
+      ESC YX FMT_CLEAR SPRITE_CLEAR, 
       s->segments[s->ghost_pointer].y + top_bound_adj, 
       s->segments[s->ghost_pointer].x + left_bound_adj_snk
     );    
