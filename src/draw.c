@@ -54,6 +54,7 @@ void draw_snake(snake* s, byte clear)
 
 void draw_snake_all(snake* s) /* For redrawing the entire snake */
 {
+  /* Draw the body of the snake */
   int j = s->gradient_indices[0];
   for (int i = 0; i < NUM_GRADIENT - 1; i++) {
     for (; j < s->gradient_indices[i + 1]; j++) {
@@ -64,6 +65,16 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
         color_table[i]
       );
     }
+  }
+  
+  /* Draw the tail of the snake */
+  for (; j < s->ghost_pointer; j++) {
+    printf(
+      ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
+      s->segments[j].y + top_bound_adj, 
+      s->segments[j].x + left_bound_adj_snk,
+      color_table[NUM_GRADIENT - 1]
+    );
   }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 

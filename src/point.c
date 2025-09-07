@@ -116,7 +116,7 @@ void add_segment(snake* s)
   for (int i = s->gradient_pointer; i < NUM_GRADIENT; i++) {
     s->gradient_indices[i]++;
   }
-  s->gradient_pointer = (s->gradient_pointer % (NUM_GRADIENT - 1)) + 1;
+  s->gradient_pointer = (s->gradient_pointer % NUM_GRADIENT) + 1;
 }
 
 int move_snake(

@@ -109,7 +109,7 @@ int main()
       
     }
 
-#if DEBUG
+#if DEBUG_COLLISION
     for (int i = 0; i < BOUNDARY_WIDTH_SNAKE; i += 2) {
       for (int j = 0; j < BOUNDARY_HEIGHT; j++) {
         printf(ESC "%d;%dH%d", j+top_bound_adj, i-BOUNDARY_WIDTH_SNAKE+left_bound_adj_snk,collision[i][j]);
