@@ -107,9 +107,9 @@ void draw_score(snake* s)
 
 void draw_controls() 
 {
-  printf(ESC "%d;1H" FMT_INFO " Quit: [q] Pause: [e] Work: [Space]", height);
+  printf(ESC "%d;1H" FMT_INFO " Quit: [Ctrl-c] Pause: [e] Work: [Space]", height);
   
-  for (int i = 0; i < width - 35; i++) { /* Length of the bottom ribbon */
+  for (int i = 0; i < width - 40; i++) { /* Length of the bottom ribbon */
     printf(" ");
   }
   
