@@ -1,5 +1,22 @@
 #include "prototypes.h"
 
+#define    SIZE_TABLE 6
+#define    SIZE_COLOR 4
+#define   COLOR_START 213
+#define    COLOR_STEP 36
+
+static char color_table[SIZE_TABLE][SIZE_COLOR];
+
+void init_color_table()
+{
+  int color = COLOR_START;
+  
+  for (int i = 0; i < COLOR_STEP; i++) {
+    sprintf(color_table[i], "%d", color);
+    color -= COLOR_STEP;
+  }
+}
+
 void draw_snake(snake* s, byte clear) 
 {
 #if DEBUG /* Print the location of each segment */
@@ -10,7 +27,7 @@ void draw_snake(snake* s, byte clear)
 #endif
   if (clear) {
     printf(
-      ESC YX FMT_CLEAR SPRITE_CLEAR, 
+      ESC YX SPRITE_CLEAR, 
       s->segments[s->ghost_pointer].y + top_bound_adj, 
       s->segments[s->ghost_pointer].x + left_bound_adj_snk
     );    
@@ -20,6 +37,14 @@ void draw_snake(snake* s, byte clear)
     s->segments[1].y + top_bound_adj, 
     s->segments[1].x + left_bound_adj_snk
   );
+  for (int i = 0; i < NUM_GRADIENT; i++) {
+    printf(
+      ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
+      s->segments[s->gradient_indices[i]].y + top_bound_adj, 
+      s->segments[s->gradient_indices[i]].x + left_bound_adj_snk,
+      color_table[i]
+    );
+  }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 
     s->segments[0].y + top_bound_adj, 
@@ -29,12 +54,16 @@ void draw_snake(snake* s, byte clear)
 
 void draw_snake_all(snake* s) /* For redrawing the entire snake */
 {
-  for (int i = 1; i <= s->ghost_pointer - 1; i++) {
-    printf(
-      ESC YX SPRITE_SNAKE_BODY, 
-      s->segments[i].y + top_bound_adj, 
-      s->segments[i].x + left_bound_adj_snk
-    );
+  int j = s->gradient_indices[0];
+  for (int i = 0; i < NUM_GRADIENT - 1; i++) {
+    for (; j < s->gradient_indices[i + 1]; j++) {
+      printf(
+        ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
+        s->segments[j].y + top_bound_adj, 
+        s->segments[j].x + left_bound_adj_snk,
+        color_table[i]
+      );
+    }
   }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 

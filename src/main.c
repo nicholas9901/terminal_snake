@@ -23,6 +23,7 @@ int main()
   init_snake(&snake, collision);
   init_apple(&apple, collision);
 
+  init_color_table();
   draw_all(&snake, &apple, bounds);
 
 #if DEBUG

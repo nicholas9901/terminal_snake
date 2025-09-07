@@ -17,6 +17,7 @@
 #define       BOUNDARY_HEIGHT 16
 #define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
 #define BOUNDARY_WIDTH_ACTUAL (BOUNDARY_WIDTH / 2)
+#define          NUM_GRADIENT 6
 
 /* Boundaries */
 #define      TOP_BOUND 1
@@ -39,11 +40,15 @@
 #define     CURSOR ESC "?25"
 #define         ON "h"
 #define        OFF "l"
-#define   FG_BLACK "38;5;0"
-#define   BG_WHITE "48;5;7"
-#define     BG_RED "48;5;1"
-#define    BG_BLUE "48;5;4"
-#define       WITH ";"
+
+#define       FG "38;5;"
+#define       BG "48;5;"
+#define FG_BLACK FG "0"
+#define BG_WHITE BG "7"
+#define  BG_GREY BG "8"
+#define   BG_RED BG "1"
+#define  BG_BLUE BG "4"
+#define     WITH ";"
 
 #define   FMT_END "m"
 #define  FMT_INFO ESC FG_BLACK WITH BG_WHITE FMT_END
@@ -52,13 +57,13 @@
 /* Sprites */ 
 #define      SPRITE_BLOCK "  "
 #define SPRITE_SNAKE_HEAD ESC BG_WHITE FMT_END SPRITE_BLOCK FMT_CLEAR
-#define SPRITE_SNAKE_BODY ESC "48;5;244m" SPRITE_BLOCK FMT_CLEAR
-#define      SPRITE_CRASH ESC BG_BLUE FMT_END SPRITE_BLOCK FMT_CLEAR
+#define SPRITE_SNAKE_BODY ESC BG_WHITE FMT_END SPRITE_BLOCK FMT_CLEAR
+#define      SPRITE_CRASH FMT_INFO "XX" FMT_CLEAR
 #define      SPRITE_APPLE ESC BG_RED FMT_END SPRITE_BLOCK FMT_CLEAR
-#define   SPRITE_BOUNDARY ESC "48;5;237m" SPRITE_BLOCK FMT_CLEAR
+#define   SPRITE_BOUNDARY ESC BG_GREY FMT_END SPRITE_BLOCK FMT_CLEAR
 #define      SPRITE_CLEAR SPRITE_BLOCK FMT_CLEAR
 
-/* Type */
+/* Types */
 typedef unsigned char byte;
 
 /* Enumerated types */
@@ -84,5 +89,7 @@ typedef struct point {
 typedef struct snake {
   int ghost_pointer;
   int score;
+  byte gradient_pointer;
+  byte gradient_indices[NUM_GRADIENT];
   point segments[ACTIVE_AREA];
 } snake;

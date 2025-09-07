@@ -51,6 +51,7 @@ int move_snake(
   draw_score(snake);                   \
   draw_controls()                      \
   
+void init_color_table();
 void draw_snake(snake*, byte);
 void draw_snake_all(snake* s);
 void draw_apple(point*);

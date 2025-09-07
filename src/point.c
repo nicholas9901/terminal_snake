@@ -51,9 +51,14 @@ void init_bounds(point* p, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 
 void init_snake(snake* s, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 {
-  int offset       = (PARTS_START * 2);
-  s->ghost_pointer = PARTS_START;
-  s->score         = 0;
+  int offset             = (PARTS_START * 2);
+  s->ghost_pointer       = PARTS_START;
+  s->score               = 0;
+  s->gradient_pointer    = PARTS_START - 1;
+  s->gradient_indices[0] = 1;
+  for (int i = 1; i < NUM_GRADIENT; i++) {
+    s->gradient_indices[i] = 2;
+  }
 
   init_point(&s->segments[0], offset, BOUNDARY_HEIGHT / 2);
 
@@ -106,6 +111,12 @@ void add_segment(snake* s)
   tail_1->y = tail_2->y;
   tail_2->x = tail_3->x;
   tail_2->y = tail_3->y;
+
+  /* Also update the gradient indices */
+  for (int i = s->gradient_pointer; i < NUM_GRADIENT; i++) {
+    s->gradient_indices[i]++;
+  }
+  s->gradient_pointer = (s->gradient_pointer % (NUM_GRADIENT - 1)) + 1;
 }
 
 int move_snake(
@@ -157,7 +168,7 @@ int move_snake(
   }
 
   *key_prev          = key_curr;
-  collision_pos      = &(c[s->segments[0].x][s->segments[0].y]);
+  collision_pos      = &c[s->segments[0].x][s->segments[0].y];
 
   switch (*collision_pos) {
     case COLLISION_NONE:
