@@ -23,9 +23,9 @@ extern int
 
 /* startup.c */
 void clean();
-void sig_exit(int); 
 void init_canvas();
 void init_term();
+void init_signal();
 
 /* point.c */
 void init_point(point*, int, int);

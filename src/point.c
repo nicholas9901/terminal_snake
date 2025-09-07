@@ -102,7 +102,7 @@ void update_apple(point* a, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
 void add_segment(snake* s)
 {
   if (s->ghost_pointer == ACTIVE_AREA) { exit(0); }
-  new_segment_added = 1;
+  new_segment_added = TRUE;
   s->ghost_pointer++;
   point* tail_1 = &(s->segments[s->ghost_pointer]);
   point* tail_2 = &(s->segments[s->ghost_pointer - 1]);
@@ -132,7 +132,7 @@ int move_snake(
   does not have collision
   */
   byte* collision_pos;
-  byte  clear = 1;
+  byte  clear = TRUE;
 
   for (int i = s->ghost_pointer; i > 0; i--) {
     s->segments[i].x = s->segments[i - 1].x;
@@ -144,8 +144,8 @@ int move_snake(
      [s->segments[s->ghost_pointer].y] = COLLISION_NONE;
   }
   else {
-    new_segment_added = 0;
-    clear = 0;
+    new_segment_added = FALSE;
+    clear = FALSE;
   }
   
   read_key:

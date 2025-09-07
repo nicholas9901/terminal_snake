@@ -2,7 +2,7 @@
 
 struct termios initial;
 
-byte new_segment_added = 0;
+byte new_segment_added = FALSE;
 
 int 
   width, 
@@ -17,7 +17,8 @@ int
   top_bound_adj,
   bottom_bound_adj;
 
-void clean() {
+void clean() 
+{
 	puts(
 	  ALT_BUF ON
 	  TERM_CLEAR
@@ -28,14 +29,15 @@ void clean() {
 	tcsetattr(1, TCSANOW, &initial);
 }
 
-void init_canvas() {
+void init_canvas() 
+{
   struct winsize ws;
 	ioctl(1, TIOCGWINSZ, &ws);
   width              = ws.ws_col;
   height             = ws.ws_row;
   mid_x              = width / 2;
   mid_y              = height / 2;
-  apple_x_start      = mid_x % 2 == 0 ? mid_x +1 : mid_x;
+  apple_x_start      = mid_x % 2 == 0 ? mid_x + 1 : mid_x;
   perimeter          = PERIMETER_SIZE;
   left_bound_adj     = LEFT_BOUND   + mid_x - (BOUNDARY_WIDTH  / 2);
   left_bound_adj_snk = left_bound_adj - 1;
@@ -44,17 +46,22 @@ void init_canvas() {
   bottom_bound_adj   = BOTTOM_BOUND + mid_y - (BOUNDARY_HEIGHT / 2);
 }
 
-void init_term() {
+void init_term() 
+{
 	struct termios current;
 	setvbuf(stdout, NULL, _IONBF, 0);
 	tcgetattr(1, &current);
-	initial = current;
 	atexit(clean);
-	signal(SIGTERM, exit);
-	signal(SIGINT, exit);
+	initial = current;
 	puts(
 	  ALT_BUF ON 
 	  CURSOR OFF);
 	current.c_lflag &= (~ECHO & ~ICANON);
 	tcsetattr(1, TCSANOW, &current);
+}
+
+void init_signal()
+{
+	signal(SIGTERM, exit);
+	signal(SIGINT, exit);
 }
