@@ -37,7 +37,6 @@ void init_signal();
 
 /* input.c */
 void set_keymap(unsigned char*);
-void toggle_hidden();
 byte get_input(unsigned char* key);
 
 /* point.c */

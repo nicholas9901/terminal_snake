@@ -65,13 +65,3 @@ byte get_input(unsigned char* key)
   return DIRECTION_NONE;
 }
 
-void toggle_hidden()
-{
-  if (hidden) {
-    puts(ALT_BUF ON);
-    redraw = TRUE;
-  }
-  else {
-  }
-  hidden = !hidden;
-}
