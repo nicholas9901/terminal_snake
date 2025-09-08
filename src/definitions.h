@@ -19,7 +19,10 @@
 #define       BOUNDARY_HEIGHT 16
 #define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
 #define BOUNDARY_WIDTH_ACTUAL (BOUNDARY_WIDTH / 2)
+#define     SIZE_INPUT_BUFFER 3
+#define        NUM_DIRECTIONS 4
 #define          NUM_GRADIENT 6
+#define              NUM_KEYS 5
 
 /* Boundaries */
 #define      TOP_BOUND 1
@@ -32,7 +35,9 @@
 #define    ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
 
 /* Key Codes */
-#define KEY_NONE -1
+#define KEY_NONE 0xFF
+#define KEY_HIDE ' '
+#define DIRECTION_NONE KEY_NONE
 
 /* ANSI escape codes */
 #define        ESC "\e["
@@ -77,10 +82,11 @@ typedef enum {
 
 typedef enum { 
   UP, 
+  RIGHT, 
   DOWN, 
-  LEFT, 
-  RIGHT 
-} direction_enum;
+  LEFT,
+  PAUSE
+} key_enum;
 
 /* Data types */
 typedef struct point {
@@ -91,6 +97,7 @@ typedef struct point {
 typedef struct snake {
   int ghost_pointer;
   int score;
+  byte direction;
   byte gradient_pointer;
   byte gradient_indices[NUM_GRADIENT];
   point segments[ACTIVE_AREA];

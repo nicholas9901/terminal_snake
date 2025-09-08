@@ -6,7 +6,16 @@
 /* External variables */
 extern struct termios initial;
 
-extern byte new_segment_added;
+extern byte 
+  paused,
+  hidden,
+  redraw,
+  new_segment_added;
+    
+extern unsigned char
+  keymap_qwerty[NUM_KEYS],
+  keymap_dvorak[NUM_KEYS],
+  keymap_azerty[NUM_KEYS];
 
 extern int 
   width, 
@@ -16,7 +25,6 @@ extern int
   apple_x_start,
   perimeter,
   left_bound_adj,
-  left_bound_adj_snk,
   right_bound_adj,
   top_bound_adj,
   bottom_bound_adj;
@@ -26,6 +34,11 @@ void clean();
 void init_canvas();
 void init_term();
 void init_signal();
+
+/* input.c */
+void set_keymap(unsigned char*);
+void toggle_hidden();
+byte get_input(unsigned char* key);
 
 /* point.c */
 void init_point(point*, int, int);
@@ -39,8 +52,7 @@ int move_snake(
   snake*, 
   point*, 
   byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
-  char,
-  char* 
+  byte
 );
 
 /* draw.c */

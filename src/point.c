@@ -6,12 +6,12 @@ void init_point(point* p, int x, int y)
   p->y = y;
 }
 
-void init_bounds(point* p, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void init_bounds(point* p, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 {
   /* Stored as relative coordinates since boundaries don't change */
   int points_index = 0;
   
-  for (int i = left_bound_adj + 1; i < right_bound_adj - 1; i += 2) {
+  for (int i = left_bound_adj + 2; i < right_bound_adj - 1; i += 2) {
     /* Top Border */
     init_point(&p[points_index++], i, top_bound_adj);
 
@@ -19,9 +19,9 @@ void init_bounds(point* p, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
     init_point(&p[points_index++], i, bottom_bound_adj);
   } 
 
-  for (int i = top_bound_adj; i < bottom_bound_adj + 10; i++) {
+  for (int i = top_bound_adj; i < bottom_bound_adj + 1; i++) {
     /* Left border */
-    init_point(&p[points_index++], left_bound_adj_snk, i);
+    init_point(&p[points_index++], left_bound_adj, i);
 
     /* Right border */
     init_point(&p[points_index++], right_bound_adj, i);
@@ -49,11 +49,12 @@ void init_bounds(point* p, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
   }
 }
 
-void init_snake(snake* s, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void init_snake(snake* s, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 {
   int offset             = (PARTS_START * 2);
   s->ghost_pointer       = PARTS_START;
   s->score               = 0;
+  s->direction           = RIGHT;
   s->gradient_pointer    = PARTS_START - 1;
   s->gradient_indices[0] = 1;
   for (int i = 1; i < NUM_GRADIENT; i++) {
@@ -72,14 +73,14 @@ void init_snake(snake* s, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
   }
 }
 
-void init_apple(point* a, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void init_apple(point* a, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 {
   int adjusted_x = (BOUNDARY_WIDTH / 2) % 2 == 1 ? (BOUNDARY_WIDTH / 2) + 1 : (BOUNDARY_WIDTH / 2);
   init_point(a, adjusted_x, BOUNDARY_HEIGHT / 2);
   c[adjusted_x][BOUNDARY_HEIGHT / 2] = COLLISION_APPLE;
 }
 
-void update_apple(point* a, byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT])
+void update_apple(point* a, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 {
   int x = ((rand() % ACTIVE_WIDTH) * 2) + 2;
   int y = (rand() % ACTIVE_HEIGHT) + 1;
@@ -122,15 +123,12 @@ void add_segment(snake* s)
 int move_snake(
   snake* s, 
   point* a, 
-  byte c[BOUNDARY_WIDTH][BOUNDARY_HEIGHT], 
-  char key_curr, 
-  char* key_prev
+  byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
+  byte direction
 ) 
 {
-  /*
-  The tail of the snake is cleared in each call of `draw_snake()` so it 
-  does not have collision
-  */
+  /* The tail of the snake is cleared in each call of `draw_snake()` so it 
+   * does not have collision */
   byte* collision_pos;
   byte  clear = TRUE;
 
@@ -148,28 +146,27 @@ int move_snake(
     clear = FALSE;
   }
   
-  read_key:
-    switch(key_curr) {
-      case 'w':
-        s->segments[0].y--;
-        break;
-      case 's':
-        s->segments[0].y++;        
-        break;
-      case 'a':
-        s->segments[0].x -= 2;        
-        break;
-      case 'd':
-        s->segments[0].x += 2;        
-        break;
-      default:
-        key_curr = *key_prev;
-        goto read_key;
+  /* Validate the proposed direction before deciding the new one
+   * (the snake shouldn't be able to move into itself) */ 
+  if (!(((direction + 2) % NUM_DIRECTIONS) == s->direction) && direction != DIRECTION_NONE) s->direction = direction;
+  
+  switch(s->direction) {
+    case UP:
+      s->segments[0].y--;
+      break;
+    case RIGHT:
+      s->segments[0].x += 2;        
+      break;
+    case DOWN:
+      s->segments[0].y++;        
+      break;
+    case LEFT:
+      s->segments[0].x -= 2;        
+      break;
   }
 
-  *key_prev          = key_curr;
-  collision_pos      = &c[s->segments[0].x][s->segments[0].y];
-
+  collision_pos = &c[s->segments[0].x][s->segments[0].y];
+  
   switch (*collision_pos) {
     case COLLISION_NONE:
       *collision_pos = COLLISION_BAD;

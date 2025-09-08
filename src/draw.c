@@ -29,26 +29,26 @@ void draw_snake(snake* s, byte clear)
     printf(
       ESC YX SPRITE_CLEAR, 
       s->segments[s->ghost_pointer].y + top_bound_adj, 
-      s->segments[s->ghost_pointer].x + left_bound_adj_snk
+      s->segments[s->ghost_pointer].x + left_bound_adj
     );    
 }
   printf(
     ESC YX SPRITE_SNAKE_BODY, 
     s->segments[1].y + top_bound_adj, 
-    s->segments[1].x + left_bound_adj_snk
+    s->segments[1].x + left_bound_adj
   );
   for (int i = 0; i < NUM_GRADIENT; i++) {
     printf(
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_adj, 
-      s->segments[s->gradient_indices[i]].x + left_bound_adj_snk,
+      s->segments[s->gradient_indices[i]].x + left_bound_adj,
       color_table[i]
     );
   }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 
     s->segments[0].y + top_bound_adj, 
-    s->segments[0].x + left_bound_adj_snk
+    s->segments[0].x + left_bound_adj
   );
 }
 
@@ -61,7 +61,7 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
       printf(
         ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
         s->segments[j].y + top_bound_adj, 
-        s->segments[j].x + left_bound_adj_snk,
+        s->segments[j].x + left_bound_adj,
         color_table[i]
       );
     }
@@ -72,20 +72,20 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
     printf(
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[j].y + top_bound_adj, 
-      s->segments[j].x + left_bound_adj_snk,
+      s->segments[j].x + left_bound_adj,
       color_table[NUM_GRADIENT - 1]
     );
   }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 
     s->segments[0].y + top_bound_adj, 
-    s->segments[0].x + left_bound_adj_snk
+    s->segments[0].x + left_bound_adj
   );
 }
 
 void draw_apple(point* a)
 {
-  printf(ESC YX SPRITE_APPLE, a->y + top_bound_adj, a->x + left_bound_adj_snk);
+  printf(ESC YX SPRITE_APPLE, a->y + top_bound_adj, a->x + left_bound_adj);
 }
 
 void draw_bounds(point* bounds) 

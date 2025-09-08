@@ -2,7 +2,11 @@
 
 struct termios initial;
 
-byte new_segment_added = FALSE;
+byte 
+	paused = FALSE,
+	hidden = FALSE,
+	redraw = FALSE,
+	new_segment_added = FALSE;
 
 int 
   width, 
@@ -12,7 +16,6 @@ int
   apple_x_start,
   perimeter,
   left_bound_adj,
-  left_bound_adj_snk,
   right_bound_adj,
   top_bound_adj,
   bottom_bound_adj;
@@ -33,17 +36,16 @@ void init_canvas()
 {
   struct winsize ws;
 	ioctl(1, TIOCGWINSZ, &ws);
-  width              = ws.ws_col;
-  height             = ws.ws_row;
-  mid_x              = width / 2;
-  mid_y              = height / 2;
-  apple_x_start      = mid_x % 2 == 0 ? mid_x + 1 : mid_x;
-  perimeter          = PERIMETER_SIZE;
-  left_bound_adj     = LEFT_BOUND   + mid_x - (BOUNDARY_WIDTH  / 2);
-  left_bound_adj_snk = left_bound_adj - 1;
-  right_bound_adj    = RIGHT_BOUND  + mid_x - (BOUNDARY_WIDTH  / 2);
-  top_bound_adj      = TOP_BOUND    + mid_y - (BOUNDARY_HEIGHT / 2);
-  bottom_bound_adj   = BOTTOM_BOUND + mid_y - (BOUNDARY_HEIGHT / 2);
+  width            = ws.ws_col;
+  height           = ws.ws_row;
+  mid_x            = width / 2;
+  mid_y            = height / 2;
+  apple_x_start    = mid_x % 2 == 0 ? mid_x + 1 : mid_x;
+  perimeter        = PERIMETER_SIZE;
+  left_bound_adj   = LEFT_BOUND   + mid_x - (BOUNDARY_WIDTH  / 2) - 1;
+  right_bound_adj  = RIGHT_BOUND  + mid_x - (BOUNDARY_WIDTH  / 2);
+  top_bound_adj    = TOP_BOUND    + mid_y - (BOUNDARY_HEIGHT / 2);
+  bottom_bound_adj = BOTTOM_BOUND + mid_y - (BOUNDARY_HEIGHT / 2);
 }
 
 void init_term() 
