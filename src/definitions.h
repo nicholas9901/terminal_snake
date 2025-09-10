@@ -89,6 +89,11 @@ typedef enum {
 } key_enum;
 
 /* Data types */
+typedef struct input_buffer {
+  byte inputs[SIZE_INPUT_BUFFER];
+  byte current;
+} input_buffer;
+
 typedef struct point {
   int x;
   int y;

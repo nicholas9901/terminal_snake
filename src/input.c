@@ -65,3 +65,25 @@ byte get_input(unsigned char* key)
   return DIRECTION_NONE;
 }
 
+void queue_input(input_buffer* input_buffer, byte direction)
+{
+  if (direction != DIRECTION_NONE && 
+      direction != input_buffer->inputs[input_buffer->current] &&       
+      input_buffer->current < SIZE_INPUT_BUFFER - 1) { 
+    input_buffer->inputs[input_buffer->current++] = direction;
+    input_buffer->inputs[input_buffer->current]   = direction; 
+    /* Is writing twice really faster than doing a comparison...? */
+  }
+}
+
+byte dequeue_input(input_buffer* input_buffer)
+{
+  byte direction = input_buffer->inputs[0];
+  if (input_buffer->current > 0) {
+    for (int i = 0; i < input_buffer->current; i++) {
+      input_buffer->inputs[i] = input_buffer->inputs[i + 1];
+    }
+    input_buffer->current--;
+  }
+  return direction;
+}

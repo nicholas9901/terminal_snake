@@ -10,7 +10,7 @@ int main()
   point apple;
   point bounds[PERIMETER_SIZE];
   byte collision[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT] = {0};
-  byte input_buffer[SIZE_INPUT_BUFFER] = {RIGHT, DIRECTION_NONE, DIRECTION_NONE};
+  input_buffer input_buffer = {{RIGHT, RIGHT, RIGHT}, 0};
   unsigned char key = KEY_NONE;
   
   set_keymap(keymap_qwerty);
@@ -31,7 +31,7 @@ int main()
   
   for (;;) {
     for (int times_to_poll = 0; times_to_poll < GAME_WAIT / POLLING_RATE; times_to_poll++) {
-      input_buffer[0] = get_input(&key);
+      queue_input(&input_buffer, get_input(&key));
       if (redraw) {
         redraw = FALSE;
         draw_all(&snake, &apple, bounds);
@@ -41,7 +41,7 @@ int main()
     }
 
     if (!paused) {
-      if (!move_snake(&snake, &apple, collision, input_buffer[0])) {
+      if (!move_snake(&snake, &apple, collision, dequeue_input(&input_buffer))) {
         printf(ESC YX "%s", snake.segments[0].y + top_bound_adj, snake.segments[0].x + left_bound_adj, SPRITE_CRASH);
         printf(ESC YX FMT_INFO "Game Over! Restart: [r]" FMT_CLEAR, TOP_BOUND, width - 23);
         key = KEY_NONE;

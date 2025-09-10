@@ -38,6 +38,9 @@ void init_signal();
 /* input.c */
 void set_keymap(unsigned char*);
 byte get_input(unsigned char* key);
+void queue_input(input_buffer* input_buffer, byte direction);
+byte dequeue_input(input_buffer* input_buffer);
+
 
 /* point.c */
 void init_point(point*, int, int);
@@ -51,8 +54,7 @@ int move_snake(
   snake*, 
   point*, 
   byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
-  byte
-);
+  byte);
 
 /* draw.c */
 #define draw_all(snake, apple, bounds) \
