@@ -9,13 +9,11 @@ extern struct termios initial;
 extern byte 
   paused,
   hidden,
-  redraw,
-  new_segment_added;
+  game_over,
+  retry,
+  redraw;
     
-extern unsigned char
-  keymap_qwerty[NUM_KEYS],
-  keymap_dvorak[NUM_KEYS],
-  keymap_azerty[NUM_KEYS];
+extern unsigned char* keymap;
 
 extern int 
   width, 
@@ -36,8 +34,12 @@ void init_term();
 void init_signal();
 
 /* input.c */
-void set_keymap(unsigned char*);
-byte get_input(unsigned char* key);
+void set_keymap(byte);
+byte parse_keypress(unsigned char* key);
+static inline byte parse_state_game_over(unsigned char*, byte*);
+static inline byte parse_state_hidden(unsigned char*, byte*);
+static inline byte parse_state_paused(unsigned char*, byte*);
+static inline byte parse_state_movement(unsigned char*);
 void queue_input(input_buffer* input_buffer, byte direction);
 byte dequeue_input(input_buffer* input_buffer);
 
@@ -57,19 +59,16 @@ int move_snake(
   byte);
 
 /* draw.c */
-#define draw_all(snake, apple, bounds) \
-  draw_snake_all(snake);               \
-  draw_apple(apple);                   \
-  draw_bounds(bounds);                 \
-  draw_score(snake);                   \
-  draw_controls()                      \
-  
 void init_color_table();
+void draw_redraw(snake*, point*, point*);
 void draw_snake(snake*, byte);
 void draw_snake_all(snake* s);
 void draw_apple(point*);
 void draw_bounds(point*);
 void draw_controls();
 void draw_score(snake*);
+void draw_pause();
+void draw_unpause();
+void draw_game_over(snake*);
 
 #endif

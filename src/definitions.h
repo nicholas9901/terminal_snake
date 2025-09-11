@@ -22,7 +22,8 @@
 #define     SIZE_INPUT_BUFFER 3
 #define        NUM_DIRECTIONS 4
 #define          NUM_GRADIENT 6
-#define              NUM_KEYS 5
+#define              NUM_KEYS 6
+#define           NUM_KEYMAPS 3
 
 /* Boundaries */
 #define      TOP_BOUND 1
@@ -37,7 +38,7 @@
 /* Key Codes */
 #define KEY_NONE 0xFF
 #define KEY_HIDE ' '
-#define DIRECTION_NONE KEY_NONE
+#define ACTION_NONE KEY_NONE
 
 /* ANSI escape codes */
 #define        ESC "\e["
@@ -81,12 +82,19 @@ typedef enum {
 } collision_enum;
 
 typedef enum { 
-  UP, 
-  RIGHT, 
-  DOWN, 
-  LEFT,
-  PAUSE
+  KEY_UP, 
+  KEY_RIGHT, 
+  KEY_DOWN, 
+  KEY_LEFT,
+  KEY_PAUSE,
+  KEY_RESTART
 } key_enum;
+
+typedef enum {
+  QWERTY,
+  AZERTY,
+  DVORAK
+} keymap_enum;
 
 /* Data types */
 typedef struct input_buffer {
@@ -103,6 +111,7 @@ typedef struct snake {
   int ghost_pointer;
   int score;
   byte direction;
+  byte new_segment_added;
   byte gradient_pointer;
   byte gradient_indices[NUM_GRADIENT];
   point segments[ACTIVE_AREA];

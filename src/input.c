@@ -1,73 +1,108 @@
 #include "prototypes.h"
 
-unsigned char keymap_qwerty[NUM_KEYS] = {'w', 'd', 's', 'a', 'e'};
-unsigned char keymap_dvorak[NUM_KEYS] = {',', 'e', 'o', 'a', '.'};
-unsigned char keymap_azerty[NUM_KEYS] = {'z', 'd', 's', 'q', 'e'};
+static unsigned char keymaps[NUM_KEYMAPS][NUM_KEYS] = {
+  {'w', 'd', 's', 'a', 'e', 'r'},
+  {'z', 'd', 's', 'q', 'e', 'r'},
+  {',', 'e', 'o', 'a', '.', 'p'}
+};
 
-static unsigned char* keymap;
+unsigned char* keymap;
 
-void set_keymap(unsigned char* keymap_chosen) { keymap = keymap_chosen; }
+void set_keymap(byte keymap_chosen) { keymap = keymaps[keymap_chosen]; }
 
-byte get_input(unsigned char* key)
+byte parse_keypress(unsigned char* key)
 {
-  read(0, key, 1);
+  byte success = FALSE;
+  byte current = ACTION_NONE;
+  read(0, key, 1);    
+  current = parse_state_game_over(key, &success);
+  if (success) return current;
+  current = parse_state_hidden(key, &success);
+  if (success) return current;
+  current = parse_state_paused(key, &success);
+  if (success) return current;
+  return parse_state_movement(key);
+}
 
-  if (paused) {
-    if (hidden) {
-      if (*key != KEY_NONE) {
-        puts(ALT_BUF ON);
-        *key   = KEY_NONE;
-        hidden = FALSE;
-        redraw = TRUE;
-        return DIRECTION_NONE;
-      }
-    }
-    if (*key == keymap[PAUSE]) {
-      printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
-      *key   = KEY_NONE;
-      paused = FALSE;
-      return DIRECTION_NONE;
-    }
-  }
-  if (*key == '\x1b') { // Arrow Keys
-    read(0, key, 2);    // Skip to the important part of the key code
+static inline byte parse_state_movement(unsigned char* key)
+{
+  if (*key == '\x1b') { 
+    read(0, key, 2);    
     switch(*key) {
-      case 'A':             
-        return UP;
-      case 'B':             
-        return DOWN;
-      case 'C':             
-        return RIGHT;
-      case 'D':             
-        return LEFT;
-      default:
-        return DIRECTION_NONE;
+    case 'A' : return KEY_UP;
+    case 'B' : return KEY_DOWN;
+    case 'C' : return KEY_RIGHT;
+    case 'D' : return KEY_LEFT;
+    default  : return ACTION_NONE;
     }
   }
+  else if (*key == keymap[KEY_UP])    return KEY_UP;
+  else if (*key == keymap[KEY_DOWN])  return KEY_DOWN;
+  else if (*key == keymap[KEY_RIGHT]) return KEY_RIGHT;
+  else if (*key == keymap[KEY_LEFT])  return KEY_LEFT;
+  return ACTION_NONE;
+}
 
-  if (*key == keymap[UP])    return UP;
-  if (*key == keymap[DOWN])  return DOWN;
-  if (*key == keymap[RIGHT]) return RIGHT;
-  if (*key == keymap[LEFT])  return LEFT;
-  if (*key == keymap[PAUSE]) {
-    *key   = KEY_NONE;
-    paused = TRUE;
-    printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
-    return DIRECTION_NONE;
+static inline byte parse_state_paused(unsigned char* key, byte* success)
+{
+  if (paused) {
+    parse_state_hidden(key, success);
+    if (*key == keymap[KEY_PAUSE]) {
+      draw_unpause();
+      *key     = KEY_NONE;
+      paused   = FALSE;
+      *success = TRUE;
+      return ACTION_NONE;
+    } 
+  } else if (*key == keymap[KEY_PAUSE]) {
+    draw_pause();
+    *key     = KEY_NONE;
+    paused   = TRUE;
+    *success = TRUE;
+    return ACTION_NONE;
   }
-  if (*key == KEY_HIDE) {
-    puts(ALT_BUF OFF);
-    *key   = KEY_NONE;
-    hidden = TRUE;
-    paused = TRUE;
-    return DIRECTION_NONE;
+  return ACTION_NONE;
+}
+
+static inline byte parse_state_hidden(unsigned char* key, byte* success)
+{
+  if (hidden) {
+    if (*key != KEY_NONE) {
+      printf(ALT_BUF ON);
+      *key     = KEY_NONE;
+      hidden   = FALSE;
+      redraw   = TRUE;
+      *success = TRUE;
+      return ACTION_NONE;
+    }
+  } else {
+    if (*key == KEY_HIDE) {
+      printf(ALT_BUF OFF);
+      *key     = KEY_NONE;
+      hidden   = TRUE;
+      paused   = TRUE;
+      *success = TRUE;
+      return ACTION_NONE;
+    }
   }
-  return DIRECTION_NONE;
+  return ACTION_NONE;
+}
+
+static inline byte parse_state_game_over(unsigned char* key, byte* success)
+{
+  if (game_over) {
+    parse_state_hidden(key, success);
+    if (*key == keymap[KEY_RESTART]) {
+      retry = TRUE;
+    }
+    *success = TRUE;
+  }
+  return ACTION_NONE;
 }
 
 void queue_input(input_buffer* input_buffer, byte direction)
 {
-  if (direction != DIRECTION_NONE && 
+  if (direction != ACTION_NONE && 
       direction != input_buffer->inputs[input_buffer->current] &&       
       input_buffer->current < SIZE_INPUT_BUFFER - 1) { 
     input_buffer->inputs[input_buffer->current++] = direction;

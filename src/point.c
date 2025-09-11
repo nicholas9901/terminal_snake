@@ -56,7 +56,7 @@ void init_snake(snake* s, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
   int offset             = (PARTS_START * 2);
   s->ghost_pointer       = PARTS_START;
   s->score               = 0;
-  s->direction           = RIGHT;
+  s->direction           = KEY_RIGHT;
   s->gradient_pointer    = PARTS_START - 1;
   s->gradient_indices[0] = 1;
   for (int i = 1; i < NUM_GRADIENT; i++) {
@@ -105,7 +105,7 @@ void update_apple(point* a, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 void add_segment(snake* s)
 {
   if (s->ghost_pointer == ACTIVE_AREA) { exit(0); }
-  new_segment_added = TRUE;
+  s->new_segment_added = TRUE;
   s->ghost_pointer++;
   point* tail_1 = &(s->segments[s->ghost_pointer]);
   point* tail_2 = &(s->segments[s->ghost_pointer - 1]);
@@ -139,30 +139,30 @@ int move_snake(
     s->segments[i].y = s->segments[i - 1].y;
   }
 
-  if (!new_segment_added) {
+  if (!s->new_segment_added) {
     c[s->segments[s->ghost_pointer].x]
      [s->segments[s->ghost_pointer].y] = COLLISION_NONE;
   }
   else {
-    new_segment_added = FALSE;
+    s->new_segment_added = FALSE;
     clear = FALSE;
   }
   
   /* Validate the proposed direction before deciding the new one
    * (the snake shouldn't be able to move into itself) */ 
-  if (!(((direction + 2) % NUM_DIRECTIONS) == s->direction) && direction != DIRECTION_NONE) s->direction = direction;
+  if (!(((direction + 2) % NUM_DIRECTIONS) == s->direction) && direction != ACTION_NONE) s->direction = direction;
   
   switch(s->direction) {
-    case UP:
+    case KEY_UP:
       s->segments[0].y--;
       break;
-    case RIGHT:
+    case KEY_RIGHT:
       s->segments[0].x += 2;        
       break;
-    case DOWN:
+    case KEY_DOWN:
       s->segments[0].y++;        
       break;
-    case LEFT:
+    case KEY_LEFT:
       s->segments[0].x -= 2;        
       break;
   }

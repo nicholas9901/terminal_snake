@@ -5,13 +5,6 @@
 #define   COLOR_START 213
 #define    COLOR_STEP 36
 
-#define draw_all(snake, apple, bounds) \
-  draw_snake_all(snake);               \
-  draw_apple(apple);                   \
-  draw_bounds(bounds);                 \
-  draw_score(snake);                   \
-  draw_controls()                      \
-  
 static char color_table[SIZE_TABLE][SIZE_COLOR];
 
 void init_color_table()
@@ -22,6 +15,18 @@ void init_color_table()
     sprintf(color_table[i], "%d", color);
     color -= COLOR_STEP;
   }
+}
+
+void draw_redraw(snake* s, point* a, point* b) 
+{
+  draw_snake_all(s);               
+  draw_apple(a);                   
+  draw_bounds(b);                 
+  draw_score(s);                   
+  draw_controls();
+  if (paused) {                        
+    draw_pause();
+  }                                    
 }
 
 void draw_snake(snake* s, byte clear) 
@@ -127,3 +132,24 @@ void draw_controls()
   printf(FMT_CLEAR); 
 }
 
+void draw_pause() {
+  printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
+}
+
+void draw_unpause() {
+  printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
+}
+
+void draw_game_over(snake* s)
+{
+  printf(
+    ESC YX "%s",
+    s->segments[0].y + top_bound_adj,
+    s->segments[0].x + left_bound_adj,
+    SPRITE_CRASH);
+  
+  printf(ESC YX FMT_INFO "Game Over! Restart: [%c]" FMT_CLEAR, 
+    TOP_BOUND, 
+    width - 23,
+    keymap[KEY_RESTART]);
+}

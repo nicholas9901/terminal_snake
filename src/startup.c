@@ -3,10 +3,11 @@
 struct termios initial;
 
 byte 
-	paused = FALSE,
-	hidden = FALSE,
-	redraw = FALSE,
-	new_segment_added = FALSE;
+	paused    = FALSE,
+	hidden    = FALSE,
+	redraw    = FALSE,
+	retry     = FALSE,
+	game_over = FALSE;
 
 int 
   width, 
@@ -22,19 +23,18 @@ int
 
 void clean() 
 {
-	puts(
+	printf(
 	  ALT_BUF ON
 	  TERM_CLEAR
 		CURSOR ON
 	  ALT_BUF OFF
-	  "\n"
   );
 	tcsetattr(1, TCSANOW, &initial);
 }
 
 void init_canvas() 
 {
-	puts(TERM_CLEAR);
+	printf(TERM_CLEAR);
   struct winsize ws;
 	ioctl(1, TIOCGWINSZ, &ws);
   width            = ws.ws_col;
@@ -57,7 +57,7 @@ void init_term()
 	tcgetattr(1, &current);
 	atexit(clean);
 	initial = current;
-	puts(
+	printf(
 	  ALT_BUF ON 
 	  CURSOR OFF);
 	current.c_lflag &= (~ECHO & ~ICANON);
