@@ -25,8 +25,6 @@ int main()
   init_snake(&snake, collision);
   init_apple(&apple, collision);
 
-  draw_all(&snake, &apple, bounds);
-
   fcntl(0, F_SETFL, O_NONBLOCK);
   
   for (;;) {

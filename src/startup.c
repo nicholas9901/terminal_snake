@@ -34,6 +34,7 @@ void clean()
 
 void init_canvas() 
 {
+	puts(TERM_CLEAR);
   struct winsize ws;
 	ioctl(1, TIOCGWINSZ, &ws);
   width            = ws.ws_col;
@@ -46,6 +47,7 @@ void init_canvas()
   right_bound_adj  = RIGHT_BOUND  + mid_x - (BOUNDARY_WIDTH  / 2);
   top_bound_adj    = TOP_BOUND    + mid_y - (BOUNDARY_HEIGHT / 2);
   bottom_bound_adj = BOTTOM_BOUND + mid_y - (BOUNDARY_HEIGHT / 2);
+  redraw           = TRUE;
 }
 
 void init_term() 
@@ -66,4 +68,5 @@ void init_signal()
 {
 	signal(SIGTERM, exit);
 	signal(SIGINT, exit);
+	signal(SIGWINCH, init_canvas);
 }

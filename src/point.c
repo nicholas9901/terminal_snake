@@ -8,31 +8,20 @@ void init_point(point* p, int x, int y)
 
 void init_bounds(point* p, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 {
-  /* Stored as relative coordinates since boundaries don't change */
   int points_index = 0;
   
-  for (int i = left_bound_adj + 2; i < right_bound_adj - 1; i += 2) {
-    /* Top Border */
-    init_point(&p[points_index++], i, top_bound_adj);
-
-    /* Bottom Border */
-    init_point(&p[points_index++], i, bottom_bound_adj);
-  } 
-
-  for (int i = top_bound_adj; i < bottom_bound_adj + 1; i++) {
-    /* Left border */
-    init_point(&p[points_index++], left_bound_adj, i);
-
-    /* Right border */
-    init_point(&p[points_index++], right_bound_adj, i);
-  }
-
-  /*
-  Shift collision fields aside from the left boundary by one to account for
-  the snake which is 2 characters wide    
-  */
+  
+  /* Shift collision fields aside from the left boundary by one to account for
+   * the snake which is 2 characters wide */   
    
   for (int i = 2; i < BOUNDARY_WIDTH; i += 2) {
+    
+    /* Top Border */
+    init_point(&p[points_index++], i, 0);
+
+    /* Bottom Border */
+    init_point(&p[points_index++], i, BOUNDARY_HEIGHT - 1);
+    
     /* Top Border */
     c[i][0] = COLLISION_BAD;
 
@@ -41,12 +30,25 @@ void init_bounds(point* p, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
   }
 
   for (int i = 1; i < BOUNDARY_HEIGHT - 1; i++) {
+    
+    /* Left border */
+    init_point(&p[points_index++], 0, i);
+
+    /* Right border */
+    init_point(&p[points_index++], BOUNDARY_WIDTH, i);
+    
     /* Left border */
     c[0][i] = COLLISION_BAD;
 
     /* Right border */
     c[BOUNDARY_WIDTH][i] = COLLISION_BAD;
   }
+
+  /* Draw the four corners which aren't accounted for by the collision */
+  init_point(&p[points_index++], 0, 0);
+  init_point(&p[points_index++], BOUNDARY_WIDTH, 0);
+  init_point(&p[points_index++], 0, BOUNDARY_HEIGHT - 1);
+  init_point(&p[points_index++], BOUNDARY_WIDTH, BOUNDARY_HEIGHT - 1);
 }
 
 void init_snake(snake* s, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])

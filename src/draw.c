@@ -5,6 +5,13 @@
 #define   COLOR_START 213
 #define    COLOR_STEP 36
 
+#define draw_all(snake, apple, bounds) \
+  draw_snake_all(snake);               \
+  draw_apple(apple);                   \
+  draw_bounds(bounds);                 \
+  draw_score(snake);                   \
+  draw_controls()                      \
+  
 static char color_table[SIZE_TABLE][SIZE_COLOR];
 
 void init_color_table()
@@ -91,7 +98,11 @@ void draw_apple(point* a)
 void draw_bounds(point* bounds) 
 {
   for (int i = 0; i < perimeter; i++) {
-    printf(ESC YX "%s", bounds[i].y, bounds[i].x, SPRITE_BOUNDARY);
+    printf(
+      ESC YX "%s",
+      bounds[i].y + top_bound_adj,
+      bounds[i].x + left_bound_adj,
+      SPRITE_BOUNDARY);
   }
 }
 
