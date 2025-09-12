@@ -36,12 +36,12 @@ static inline byte parse_state_movement(unsigned char* key)
   if (*key == '\x1b') { 
     read(0, key, 1); /* Skip to the important part of the key code */    
     read(0, key, 1);    
-    switch(*key) {
-    case 'A': return KEY_UP;
-    case 'B': return KEY_DOWN;
-    case 'C': return KEY_RIGHT;
-    case 'D': return KEY_LEFT;
-    default: return ACTION_NONE;
+    switch (*key) {
+      case 'A': return KEY_UP;
+      case 'B': return KEY_DOWN;
+      case 'C': return KEY_RIGHT;
+      case 'D': return KEY_LEFT;
+      default: return ACTION_NONE;
     }
   }
   else if (*key == keymap[KEY_UP])    return KEY_UP;

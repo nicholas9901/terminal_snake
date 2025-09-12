@@ -4,6 +4,7 @@
 #include <string.h>
 #include <signal.h>
 #include <sys/ioctl.h>
+#include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
 
@@ -62,6 +63,12 @@
 #define  FMT_INFO ESC FG_BLACK WITH BG_WHITE FMT_END
 #define FMT_CLEAR ESC "0m"
 
+/* Gradient-related */
+#define NUM_GRADIENTS 5
+#define SIZE_GRADIENT 6
+#define    SIZE_COLOR 4
+#define     SIZE_NAME 6
+
 /* Sprites */ 
 #define      SPRITE_BLOCK "  "
 #define SPRITE_SNAKE_HEAD ESC BG_WHITE FMT_END SPRITE_BLOCK FMT_CLEAR
@@ -109,6 +116,11 @@ typedef struct input_buffer {
   byte current;
 } input_buffer;
 
+typedef struct gradient_pair {
+  char name[SIZE_NAME];
+  char colors[SIZE_GRADIENT][SIZE_COLOR];
+} gradient_pair;
+
 typedef struct point {
   int x;
   int y;
@@ -119,6 +131,7 @@ typedef struct snake {
   int score;
   byte direction;
   byte new_segment_added;
+  char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR];
   byte gradient_pointer;
   byte gradient_indices[NUM_GRADIENT];
   point segments[ACTIVE_AREA];

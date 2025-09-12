@@ -20,6 +20,14 @@ int
   top_bound_adj,
   bottom_bound_adj;
 
+gradient_pair gradient_table[NUM_GRADIENTS] = {
+  {"warm",  {"196", "202", "208", "214", "220", "226"}},
+  {"cool",  {"21",  "27",  "33",  "39",  "45",  "51"}},
+  {"barf",  {"34",  "40",  "46",  "82",  "118", "154"}},
+  {"16bit", {"9",   "10",  "11",  "12",  "13",  "14"}},
+  {"none",  {"239", "239", "239", "239", "239", "239"}}
+};
+
 void clean() 
 {
 	printf(
@@ -51,6 +59,7 @@ void init_canvas()
 void init_term() 
 {
 	struct termios current;
+  fcntl(0, F_SETFL, O_NONBLOCK);
 	setvbuf(stdout, NULL, _IONBF, 0);
 	tcgetattr(1, &current);
 	atexit(clean);

@@ -51,12 +51,16 @@ void init_bounds(point* p, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
   init_point(&p[points_index++], BOUNDARY_WIDTH, BOUNDARY_HEIGHT - 1);
 }
 
-void init_snake(snake* s, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
+void init_snake(
+  snake* s, 
+  byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], 
+  char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR])
 {
   int offset             = (PARTS_START * 2);
   s->ghost_pointer       = PARTS_START;
   s->score               = 0;
   s->direction           = KEY_RIGHT;
+  s->gradient_chosen     = gradient_chosen;
   s->gradient_pointer    = PARTS_START - 1;
   s->gradient_indices[0] = 1;
   s->new_segment_added   = FALSE;

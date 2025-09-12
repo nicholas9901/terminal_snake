@@ -1,16 +1,9 @@
 #include "prototypes.h"
 
-#define  SIZE_TABLE 6
-#define  SIZE_COLOR 4
-#define COLOR_START 213
-#define  COLOR_STEP 36
-
 static char msg_controls_formatted[sizeof(MSG_CONTROLS) - 4];
-static char color_table[SIZE_TABLE][SIZE_COLOR];
 
-void init_color_table()
+void init_draw_buffers()
 {
-  int color = COLOR_START;
   sprintf(
     msg_controls_formatted, 
     MSG_CONTROLS, 
@@ -19,11 +12,6 @@ void init_color_table()
     keymap[KEY_DOWN],
     keymap[KEY_RIGHT],
     keymap[KEY_PAUSE]);
-  
-  for (int i = 0; i < COLOR_STEP; i++) {
-    sprintf(color_table[i], "%d", color);
-    color -= COLOR_STEP;
-  }
 }
 
 void draw_redraw(snake* s, point* a, point* b) 
@@ -67,7 +55,7 @@ void draw_snake(snake* s, byte clear)
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_adj, 
       s->segments[s->gradient_indices[i]].x + left_bound_adj,
-      color_table[i]
+      (*s->gradient_chosen)[i]
     );
   }
   printf(
@@ -87,7 +75,7 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
         ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
         s->segments[j].y + top_bound_adj, 
         s->segments[j].x + left_bound_adj,
-        color_table[i]
+        (*s->gradient_chosen)[i]
       );
     }
   }
@@ -98,8 +86,7 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[j].y + top_bound_adj, 
       s->segments[j].x + left_bound_adj,
-      color_table[NUM_GRADIENT - 1]
-    );
+      (*s->gradient_chosen)[NUM_GRADIENT - 1]);
   }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 

@@ -25,6 +25,11 @@ extern int
   right_bound_adj,
   top_bound_adj,
   bottom_bound_adj;
+  
+extern gradient_pair gradient_table[NUM_GRADIENTS];
+
+/* main.c */
+static inline void usage_and_exit();
 
 /* startup.c */
 void clean();
@@ -47,7 +52,7 @@ byte dequeue_input(input_buffer* input_buffer);
 /* point.c */
 void init_point(point*, int, int);
 void init_bounds(point*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
-void init_snake(snake*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
+void init_snake(snake*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT], char (*)[SIZE_GRADIENT][SIZE_COLOR]);
 void init_apple(point*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
 
 void update_apple(point*, byte[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT]);
@@ -59,7 +64,7 @@ int move_snake(
   byte);
 
 /* draw.c */
-void init_color_table();
+void init_draw_buffers();
 void draw_redraw(snake*, point*, point*);
 void draw_snake(snake*, byte);
 void draw_snake_all(snake* s);
