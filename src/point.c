@@ -59,6 +59,7 @@ void init_snake(snake* s, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
   s->direction           = KEY_RIGHT;
   s->gradient_pointer    = PARTS_START - 1;
   s->gradient_indices[0] = 1;
+  s->new_segment_added   = FALSE;
   for (int i = 1; i < NUM_GRADIENT; i++) {
     s->gradient_indices[i] = 2;
   }
@@ -129,8 +130,6 @@ int move_snake(
   byte direction
 ) 
 {
-  /* The tail of the snake is cleared in each call of `draw_snake()` so it 
-   * does not have collision */
   byte* collision_pos;
   byte  clear = TRUE;
 
