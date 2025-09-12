@@ -20,7 +20,6 @@ extern int
   height, 
   mid_x,
   mid_y,
-  apple_x_start,
   perimeter,
   left_bound_adj,
   right_bound_adj,
@@ -35,6 +34,7 @@ void init_signal();
 
 /* input.c */
 void set_keymap(byte);
+byte get_action(unsigned char* key);
 byte parse_keypress(unsigned char* key);
 static inline byte parse_state_game_over(unsigned char*, byte*);
 static inline byte parse_state_hidden(unsigned char*, byte*);

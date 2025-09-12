@@ -14,7 +14,6 @@ int
   height, 
   mid_x,
   mid_y,
-  apple_x_start,
   perimeter,
   left_bound_adj,
   right_bound_adj,
@@ -41,7 +40,6 @@ void init_canvas()
   height           = ws.ws_row;
   mid_x            = width / 2;
   mid_y            = height / 2;
-  apple_x_start    = mid_x % 2 == 0 ? mid_x + 1 : mid_x;
   perimeter        = PERIMETER_SIZE;
   left_bound_adj   = LEFT_BOUND   + mid_x - (BOUNDARY_WIDTH  / 2) - 1;
   right_bound_adj  = RIGHT_BOUND  + mid_x - (BOUNDARY_WIDTH  / 2);

@@ -10,11 +10,18 @@ unsigned char* keymap;
 
 void set_keymap(byte keymap_chosen) { keymap = keymaps[keymap_chosen]; }
 
+byte get_action(unsigned char* key)
+{
+  read(0, key, 1);    
+  byte action = parse_keypress(key);
+  *key = KEY_NONE;
+  return action;
+}
+
 byte parse_keypress(unsigned char* key)
 {
   byte success = FALSE;
   byte current = ACTION_NONE;
-  read(0, key, 1);    
   current = parse_state_game_over(key, &success);
   if (success) return current;
   current = parse_state_hidden(key, &success);
@@ -27,13 +34,14 @@ byte parse_keypress(unsigned char* key)
 static inline byte parse_state_movement(unsigned char* key)
 {
   if (*key == '\x1b') { 
-    read(0, key, 2);    
+    read(0, key, 1); /* Skip to the important part of the key code */    
+    read(0, key, 1);    
     switch(*key) {
-    case 'A' : return KEY_UP;
-    case 'B' : return KEY_DOWN;
-    case 'C' : return KEY_RIGHT;
-    case 'D' : return KEY_LEFT;
-    default  : return ACTION_NONE;
+    case 'A': return KEY_UP;
+    case 'B': return KEY_DOWN;
+    case 'C': return KEY_RIGHT;
+    case 'D': return KEY_LEFT;
+    default: return ACTION_NONE;
     }
   }
   else if (*key == keymap[KEY_UP])    return KEY_UP;
@@ -49,14 +57,12 @@ static inline byte parse_state_paused(unsigned char* key, byte* success)
     parse_state_hidden(key, success);
     if (*key == keymap[KEY_PAUSE]) {
       draw_unpause();
-      *key     = KEY_NONE;
       paused   = FALSE;
       *success = TRUE;
       return ACTION_NONE;
     } 
   } else if (*key == keymap[KEY_PAUSE]) {
     draw_pause();
-    *key     = KEY_NONE;
     paused   = TRUE;
     *success = TRUE;
     return ACTION_NONE;
@@ -69,7 +75,6 @@ static inline byte parse_state_hidden(unsigned char* key, byte* success)
   if (hidden) {
     if (*key != KEY_NONE) {
       printf(ALT_BUF ON);
-      *key     = KEY_NONE;
       hidden   = FALSE;
       redraw   = TRUE;
       *success = TRUE;
@@ -78,7 +83,6 @@ static inline byte parse_state_hidden(unsigned char* key, byte* success)
   } else {
     if (*key == KEY_HIDE) {
       printf(ALT_BUF OFF);
-      *key     = KEY_NONE;
       hidden   = TRUE;
       paused   = TRUE;
       *success = TRUE;

@@ -77,9 +77,9 @@ void init_snake(snake* s, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 
 void init_apple(point* a, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
 {
-  int adjusted_x = (BOUNDARY_WIDTH / 2) % 2 == 1 ? (BOUNDARY_WIDTH / 2) + 1 : (BOUNDARY_WIDTH / 2);
-  init_point(a, adjusted_x, BOUNDARY_HEIGHT / 2);
-  c[adjusted_x][BOUNDARY_HEIGHT / 2] = COLLISION_APPLE;
+  int x_adjusted = (BOUNDARY_WIDTH / 2) % 2 == 1 ? (BOUNDARY_WIDTH / 2) + 1 : (BOUNDARY_WIDTH / 2);
+  init_point(a, x_adjusted, BOUNDARY_HEIGHT / 2);
+  c[x_adjusted][BOUNDARY_HEIGHT / 2] = COLLISION_APPLE;
 }
 
 void update_apple(point* a, byte c[BOUNDARY_WIDTH_SNAKE][BOUNDARY_HEIGHT])
