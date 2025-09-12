@@ -18,7 +18,6 @@
 #define        BOUNDARY_WIDTH 32 /* Must be even */
 #define       BOUNDARY_HEIGHT 16
 #define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
-#define BOUNDARY_WIDTH_ACTUAL (BOUNDARY_WIDTH / 2)
 #define     SIZE_INPUT_BUFFER 3
 #define        NUM_DIRECTIONS 4
 #define          NUM_GRADIENT 6
@@ -30,7 +29,7 @@
 #define   BOTTOM_BOUND BOUNDARY_HEIGHT
 #define     LEFT_BOUND 1
 #define    RIGHT_BOUND BOUNDARY_WIDTH
-#define PERIMETER_SIZE ((2 * BOUNDARY_WIDTH_ACTUAL) + (2 * BOUNDARY_HEIGHT) - 2)
+#define PERIMETER_SIZE (BOUNDARY_WIDTH + (2 * BOUNDARY_HEIGHT) - 2)
 #define   ACTIVE_WIDTH ((BOUNDARY_WIDTH - 2) / 2)
 #define  ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
 #define    ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
@@ -42,7 +41,8 @@
 
 /* ANSI escape codes */
 #define        ESC "\e["
-#define         YX "%d;%dH"    /* Terminal coordinates */
+#define          Y "%d;1H"
+#define         YX "%d;%dH"
 #define TERM_CLEAR ESC "2J"     
 #define    ALT_BUF ESC "?1049"
 #define     CURSOR ESC "?25"
@@ -70,6 +70,13 @@
 #define      SPRITE_APPLE ESC BG_RED FMT_END SPRITE_BLOCK FMT_CLEAR
 #define   SPRITE_BOUNDARY ESC BG_GREY FMT_END SPRITE_BLOCK FMT_CLEAR
 #define      SPRITE_CLEAR SPRITE_BLOCK FMT_CLEAR
+
+/* Text-related */
+#define       MSG_SCORE " Score: "
+#define       MSG_PAUSE "Paused"
+#define MSG_PAUSE_CLEAR "      "
+#define    MSG_CONTROLS " Quit: [Ctrl-c] Move: [%c%c%c%c] Pause: [%c] Work: [Space]"
+#define   MSG_GAME_OVER "Game Over! Restart: [%c] "
 
 /* Types */
 typedef unsigned char byte;

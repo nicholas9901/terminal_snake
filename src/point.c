@@ -179,7 +179,7 @@ int move_snake(
       s->score++;
       add_segment(s);
       draw_snake(s, clear);
-      printf(ESC YX FMT_INFO "%d", 1, 9,  s->score);
+      draw_score(s->score);
       update_apple(a, c);
       break; 
     case COLLISION_BAD:

@@ -1,15 +1,24 @@
 #include "prototypes.h"
 
-#define    SIZE_TABLE 6
-#define    SIZE_COLOR 4
-#define   COLOR_START 213
-#define    COLOR_STEP 36
+#define  SIZE_TABLE 6
+#define  SIZE_COLOR 4
+#define COLOR_START 213
+#define  COLOR_STEP 36
 
+static char msg_controls_formatted[sizeof(MSG_CONTROLS) - 4];
 static char color_table[SIZE_TABLE][SIZE_COLOR];
 
 void init_color_table()
 {
   int color = COLOR_START;
+  sprintf(
+    msg_controls_formatted, 
+    MSG_CONTROLS, 
+    keymap[KEY_UP],
+    keymap[KEY_LEFT],
+    keymap[KEY_DOWN],
+    keymap[KEY_RIGHT],
+    keymap[KEY_PAUSE]);
   
   for (int i = 0; i < COLOR_STEP; i++) {
     sprintf(color_table[i], "%d", color);
@@ -22,10 +31,14 @@ void draw_redraw(snake* s, point* a, point* b)
   draw_snake_all(s);               
   draw_apple(a);                   
   draw_bounds(b);                 
-  draw_score(s);                   
-  draw_controls();
+  draw_ribbons();                   
+  draw_score(s->score);
   if (paused) {                        
-    draw_pause();
+    if (game_over) {
+      draw_game_over(s);
+    } else {
+      draw_pause();
+    }
   }                                    
 }
 
@@ -111,33 +124,23 @@ void draw_bounds(point* bounds)
   }
 }
 
-void draw_score(snake* s)
+void draw_score(int score)
 {
-  printf(ESC "%d;1H" FMT_INFO " Score: %d", 1, s->score);
-
-  for (int i = 0; i < width - 9; i++) { /* Length of the top ribbon */
-    printf(" ");
-  }
-  printf(FMT_CLEAR); 
+  printf(ESC YX FMT_INFO "%d" FMT_CLEAR, TOP_BOUND, (int) sizeof(MSG_SCORE), score);
 }
 
-void draw_controls() 
+void draw_ribbons()
 {
-  printf(ESC "%d;1H" FMT_INFO " Quit: [Ctrl-c] Pause: [e] Work: [Space]", height);
-  
-  for (int i = 0; i < width - 40; i++) { /* Length of the bottom ribbon */
-    printf(" ");
-  }
-  
-  printf(FMT_CLEAR); 
+  printf(ESC Y FMT_INFO "%-*s" FMT_CLEAR, TOP_BOUND, width, MSG_SCORE);
+  printf(ESC Y FMT_INFO "%-*s" FMT_CLEAR, height, width, msg_controls_formatted);
 }
 
 void draw_pause() {
-  printf(ESC YX FMT_INFO "Paused" FMT_CLEAR,  TOP_BOUND, width - 6);
+  printf(ESC YX FMT_INFO MSG_PAUSE FMT_CLEAR, TOP_BOUND, width - (int) sizeof(MSG_PAUSE) + 1);
 }
 
 void draw_unpause() {
-  printf(ESC YX FMT_INFO "      " FMT_CLEAR, TOP_BOUND, width - 6); 
+  printf(ESC YX FMT_INFO MSG_PAUSE_CLEAR FMT_CLEAR, TOP_BOUND, width - (int) sizeof(MSG_PAUSE) + 1); 
 }
 
 void draw_game_over(snake* s)
@@ -148,8 +151,8 @@ void draw_game_over(snake* s)
     s->segments[0].x + left_bound_adj,
     SPRITE_CRASH);
   
-  printf(ESC YX FMT_INFO "Game Over! Restart: [%c]" FMT_CLEAR, 
+  printf(ESC YX FMT_INFO MSG_GAME_OVER FMT_CLEAR, 
     TOP_BOUND, 
-    width - 23,
+    width - (int) sizeof(MSG_GAME_OVER) + 3,
     keymap[KEY_RESTART]);
 }
