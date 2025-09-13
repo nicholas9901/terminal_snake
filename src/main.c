@@ -102,7 +102,7 @@ int main(int argc, char** argv)
       }
       usleep(POLLING_RATE);
     }
-  
+    
     if (!paused) {
       if (!move_snake(&snake, &apple, collision, dequeue_input(&input_buffer))) {
         game_over = TRUE;

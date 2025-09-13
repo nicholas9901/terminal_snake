@@ -12,7 +12,6 @@
 #define FALSE 0
 
 /* Main game-related definitions */
-#define                 DEBUG 0
 #define           PARTS_START 3
 #define             GAME_WAIT 100000
 #define          POLLING_RATE 10000

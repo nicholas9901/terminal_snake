@@ -32,12 +32,6 @@ void draw_redraw(snake* s, point* a, point* b)
 
 void draw_snake(snake* s, byte clear) 
 {
-#if DEBUG /* Print the location of each segment */
-  printf(ESC "0;0H");
-  for (int i = 0; i <= s->ghost_pointer; i++) {
-    printf("(%d,%d)", s->segments[i].x, s->segments[i].y);
-  }
-#endif
   if (clear) {
     printf(
       ESC YX SPRITE_CLEAR, 
@@ -50,7 +44,7 @@ void draw_snake(snake* s, byte clear)
     s->segments[1].y + top_bound_adj, 
     s->segments[1].x + left_bound_adj
   );
-  for (int i = 0; i < NUM_GRADIENT; i++) {
+  for (int i = NUM_GRADIENT - 1; i >= 0; i--) {
     printf(
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_adj, 
@@ -68,25 +62,15 @@ void draw_snake(snake* s, byte clear)
 void draw_snake_all(snake* s) /* For redrawing the entire snake */
 {
   /* Draw the body of the snake */
-  int j = s->gradient_indices[0];
-  for (int i = 0; i < NUM_GRADIENT - 1; i++) {
-    for (; j < s->gradient_indices[i + 1]; j++) {
+  int j = s->ghost_pointer - 1;
+  for (int i = NUM_GRADIENT - 1; i >= 0; i--) {
+    for (; j >= s->gradient_indices[i]; j--) {
       printf(
         ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
         s->segments[j].y + top_bound_adj, 
         s->segments[j].x + left_bound_adj,
-        (*s->gradient_chosen)[i]
-      );
+        (*s->gradient_chosen)[i]);
     }
-  }
-  
-  /* Draw the tail of the snake */
-  for (; j < s->ghost_pointer; j++) {
-    printf(
-      ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
-      s->segments[j].y + top_bound_adj, 
-      s->segments[j].x + left_bound_adj,
-      (*s->gradient_chosen)[NUM_GRADIENT - 1]);
   }
   printf(
     ESC YX SPRITE_SNAKE_HEAD, 
