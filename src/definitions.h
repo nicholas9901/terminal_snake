@@ -12,17 +12,18 @@
 #define FALSE 0
 
 /* Main game-related definitions */
-#define           PARTS_START 3
-#define             GAME_WAIT 100000
-#define          POLLING_RATE 10000
-#define        BOUNDARY_WIDTH 32 /* Must be even */
-#define       BOUNDARY_HEIGHT 16
-#define  BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
-#define     SIZE_INPUT_BUFFER 3
-#define        NUM_DIRECTIONS 4
-#define          NUM_GRADIENT 6
-#define              NUM_KEYS 6
-#define           NUM_KEYMAPS 3
+#define             PARTS_START 3
+#define              GAME_SPEED 100000
+#define GAME_SPEED_MILLISECONDS (GAME_SPEED / 1000)
+#define            POLLING_RATE 10000
+#define          BOUNDARY_WIDTH 32 /* Must be even */
+#define         BOUNDARY_HEIGHT 16
+#define    BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
+#define       SIZE_INPUT_BUFFER 3
+#define          NUM_DIRECTIONS 4
+#define            NUM_GRADIENT 6
+#define                NUM_KEYS 6
+#define             NUM_KEYMAPS 3
 
 /* Boundaries */
 #define      TOP_BOUND 1

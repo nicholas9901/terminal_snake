@@ -10,9 +10,10 @@ static inline void usage_and_exit()
     "Usage: terminal_snake [OPTIONS]...\n\n"
     "Option        Long Option           Description\n"
     "-h            --help                Display this message\n"
-    "-k <keymap>   --keymap=<keymap>     Choose the keymap (qwerty|azerty|dvorak)\n"
-    "-g <gradient> --gradient=<gradient> Choose the gradient\n\n"
-    "Gradients:\n");
+    "-s            --speed <speed>       Change the speed (default %d)\n"
+    "-k <keymap>   --keymap <keymap>     Choose the keymap (qwerty|azerty|dvorak)\n"
+    "-g <gradient> --gradient <gradient> Choose the gradient\n\n"
+    "Gradients:\n", GAME_SPEED_MILLISECONDS);
   for (int i = 0; i < NUM_GRADIENTS; i++) {
     printf("%-*s", SIZE_NAME, gradient_table[i].name);
     for (int j = SIZE_GRADIENT - 1; j >= 0; j--) {
@@ -25,20 +26,25 @@ static inline void usage_and_exit()
 
 int main(int argc, char** argv) 
 {
-  char opt;
+  int game_speed = GAME_SPEED;
   byte keymap_chosen = QWERTY;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR] = &(gradient_table[2].colors);
+  char opt;
   const struct option long_options[] = {
     {"help",     0, NULL, 'h'},
+    {"speed",    1, NULL, 's'},
     {"keymap",   1, NULL, 'k'},
     {"gradient", 1, NULL, 'g'},
     {NULL,       0, NULL,   0}
   };
     
-	while ((opt = getopt_long(argc, argv, "hk:g:", long_options, NULL)) > 0) {
+	while ((opt = getopt_long(argc, argv, "hs:k:g:", long_options, NULL)) > 0) {
 	  switch (opt) {
 	    case 'h':
 	      usage_and_exit();
+	    case 's':
+	      game_speed = atoi(optarg) * 1000;
+	      break;
 	    case 'k':
 	      if      (!strcmp(optarg, "qwerty")) break;
 	      else if (!strcmp(optarg, "azerty")) keymap_chosen = AZERTY;
@@ -82,7 +88,7 @@ int main(int argc, char** argv)
   init_apple(&apple, collision);
   
   for (;;) {
-    for (int times_to_poll = 0; times_to_poll < GAME_WAIT / POLLING_RATE; times_to_poll++) {
+    for (int times_to_poll = 0; times_to_poll < game_speed / POLLING_RATE; times_to_poll++) {
       queue_input(&input_buffer, get_action(&key));
       if (redraw) {
         redraw = FALSE;
