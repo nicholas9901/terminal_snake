@@ -16,28 +16,32 @@
 #define              GAME_SPEED 100000
 #define GAME_SPEED_MILLISECONDS (GAME_SPEED / 1000)
 #define            POLLING_RATE 10000
-#define          BOUNDARY_WIDTH 32 /* Must be even */
-#define         BOUNDARY_HEIGHT 16
-#define    BOUNDARY_WIDTH_SNAKE (BOUNDARY_WIDTH + 1)
-#define       SIZE_INPUT_BUFFER 3
-#define          NUM_DIRECTIONS 4
-#define            NUM_GRADIENT 6
-#define                NUM_KEYS 6
-#define             NUM_KEYMAPS 3
+#define          BOUNDARY_WIDTH 16
+#define         BOUNDARY_HEIGHT BOUNDARY_WIDTH
+
+/* Buffer sizes */
+#define SIZE_INPUT_BUFFER 3
+#define    NUM_DIRECTIONS 4
+#define          NUM_KEYS 6
+#define       NUM_KEYMAPS 3
+#define     NUM_GRADIENTS 5
+#define     SIZE_GRADIENT 6
+#define        SIZE_COLOR 4
+#define         SIZE_NAME 6
 
 /* Boundaries */
 #define      TOP_BOUND 1
 #define   BOTTOM_BOUND BOUNDARY_HEIGHT
 #define     LEFT_BOUND 1
 #define    RIGHT_BOUND BOUNDARY_WIDTH
-#define PERIMETER_SIZE (BOUNDARY_WIDTH + (2 * BOUNDARY_HEIGHT) - 2)
-#define   ACTIVE_WIDTH ((BOUNDARY_WIDTH - 2) / 2)
-#define  ACTIVE_HEIGHT (BOUNDARY_HEIGHT - 2)
-#define    ACTIVE_AREA (ACTIVE_WIDTH * ACTIVE_HEIGHT)
+
+#define perimeter(width, height) (2 * (width + height)) - 4
+#define active(length) (length - 2)
+#define area(width, height) (width * height)
 
 /* Key Codes */
-#define KEY_NONE 0xFF
-#define KEY_HIDE ' '
+#define    KEY_NONE 0xFF
+#define    KEY_HIDE ' '
 #define ACTION_NONE KEY_NONE
 
 /* ANSI escape codes */
@@ -63,12 +67,6 @@
 #define  FMT_INFO ESC FG_BLACK WITH BG_WHITE FMT_END
 #define FMT_CLEAR ESC "0m"
 
-/* Gradient-related */
-#define NUM_GRADIENTS 5
-#define SIZE_GRADIENT 6
-#define    SIZE_COLOR 4
-#define     SIZE_NAME 6
-
 /* Sprites */ 
 #define      SPRITE_BLOCK "  "
 #define SPRITE_SNAKE_HEAD ESC BG_WHITE FMT_END SPRITE_BLOCK FMT_CLEAR
@@ -83,10 +81,18 @@
 #define       MSG_PAUSE "Paused"
 #define MSG_PAUSE_CLEAR "      "
 #define    MSG_CONTROLS " Quit: [Ctrl-c] Move: [%c%c%c%c] Pause: [%c] Work: [Space]"
-#define   MSG_GAME_OVER "Game Over! Restart: [%c] "
+#define     MSG_RESTART "Restart: [%c] "
+#define   MSG_GAME_OVER "Game Over! " MSG_RESTART
+#define         MSG_WIN "You Win! " MSG_RESTART
 
 /* Types */
 typedef unsigned char byte;
+
+typedef enum {
+  STATUS_NONE,
+  STATUS_BAD,
+  STATUS_WIN
+} status_enum;
 
 /* Enumerated types */
 typedef enum { 
@@ -111,6 +117,15 @@ typedef enum {
 } keymap_enum;
 
 /* Data types */
+typedef struct context {
+  int width;
+  int height;
+  int active_width;
+  int active_height;
+  int active_area;
+  int perimeter_size;
+} context;
+
 typedef struct input_buffer {
   byte inputs[SIZE_INPUT_BUFFER];
   byte current;
@@ -133,6 +148,6 @@ typedef struct snake {
   byte new_segment_added;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR];
   byte gradient_pointer;
-  byte gradient_indices[NUM_GRADIENT];
-  point segments[ACTIVE_AREA];
+  byte gradient_indices[SIZE_GRADIENT];
+  point* segments;
 } snake;
