@@ -20,6 +20,8 @@ void init_canvas()
 	ioctl(1, TIOCGWINSZ, &ws);
   width_terminal        = ws.ws_col;
   height_terminal       = ws.ws_row;
+  width_terminal_min    = MAX(sizeof(MSG_CONTROLS) - 5, boundary_context.width);
+  height_terminal_min   = boundary_context.height + 2;
   mid_width_terminal    = width_terminal / 2;
   mid_height_terminal   = height_terminal / 2;
   left_bound_terminal   = LEFT_BOUND + mid_width_terminal - boundary_context.width;

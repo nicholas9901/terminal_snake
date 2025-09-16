@@ -8,6 +8,11 @@
 #include <termios.h>
 #include <unistd.h>
 
+#define MAX(a, b) ((a) < (b) ? (b) : (a))
+#define PERIMETER(width, height) (2 * (width + height)) - 4
+#define ACTIVE(length) (length - 2)
+#define AREA(width, height) (width * height)
+
 #define  TRUE 1
 #define FALSE 0
 
@@ -34,10 +39,6 @@
 #define   BOTTOM_BOUND BOUNDARY_HEIGHT
 #define     LEFT_BOUND 1
 #define    RIGHT_BOUND BOUNDARY_WIDTH
-
-#define perimeter(width, height) (2 * (width + height)) - 4
-#define active(length) (length - 2)
-#define area(width, height) (width * height)
 
 /* Key Codes */
 #define    KEY_NONE 0xFF

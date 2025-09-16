@@ -18,6 +18,8 @@ int
   height_terminal, 
   mid_width_terminal,
   mid_height_terminal,
+  width_terminal_min,
+  height_terminal_min,
   left_bound_terminal,
   right_bound_terminal,
   top_bound_terminal,
@@ -58,10 +60,10 @@ static inline void calculate_context(int width, int height)
 {
   boundary_context.width          = width;
   boundary_context.height         = height;
-  boundary_context.active_width   = active(boundary_context.width);
-  boundary_context.active_height  = active(boundary_context.height);
-  boundary_context.active_area    = area(boundary_context.active_width, boundary_context.active_height);
-  boundary_context.perimeter_size = perimeter(width, height);
+  boundary_context.active_width   = ACTIVE(boundary_context.width);
+  boundary_context.active_height  = ACTIVE(boundary_context.height);
+  boundary_context.active_area    = AREA(boundary_context.active_width, boundary_context.active_height);
+  boundary_context.perimeter_size = PERIMETER(width, height);
 }
 
 int main(int argc, char** argv) 

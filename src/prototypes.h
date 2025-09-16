@@ -22,6 +22,8 @@ extern int
   height_terminal, 
   mid_width_terminal,
   mid_height_terminal,
+  width_terminal_min,
+  height_terminal_min,
   left_bound_terminal,
   right_bound_terminal,
   top_bound_terminal,

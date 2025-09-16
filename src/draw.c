@@ -16,6 +16,18 @@ void init_draw_buffers()
 
 void draw_redraw(snake* s, point* a, point* b) 
 {
+  if (width_terminal < width_terminal_min || height_terminal < height_terminal_min) {
+    paused = TRUE;
+    printf(
+      TERM_CLEAR ESC YX "Window too small!\n" 
+      ESC YX "Required: %d, %d\n"
+      ESC YX "Current: %d, %d\n" FMT_CLEAR,
+      mid_height_terminal - 1, mid_width_terminal - 9,
+      mid_height_terminal, mid_width_terminal - 9, width_terminal_min, height_terminal_min,
+      mid_height_terminal + 1, mid_width_terminal - 8, width_terminal, height_terminal);
+    pause();
+    return;
+  }
   draw_snake_all(s);               
   draw_apple(a);                   
   draw_bounds(b, boundary_context.perimeter_size);                 
@@ -138,7 +150,8 @@ void draw_game_over_ribbon(snake* s)
     (s->segments[0].x * 2) + left_bound_terminal,
     SPRITE_CRASH);
   
-  printf(ESC YX FMT_INFO MSG_GAME_OVER FMT_CLEAR, 
+  printf(
+    ESC YX FMT_INFO MSG_GAME_OVER FMT_CLEAR, 
     TOP_BOUND, 
     width_terminal - (int) sizeof(MSG_GAME_OVER) + 3,
     keymap[KEY_RESTART]);
@@ -146,7 +159,8 @@ void draw_game_over_ribbon(snake* s)
 
 void draw_win_ribbon()
 {
-  printf(ESC YX FMT_INFO MSG_WIN FMT_CLEAR, 
+  printf(
+    ESC YX FMT_INFO MSG_WIN FMT_CLEAR, 
     TOP_BOUND, 
     width_terminal - (int) sizeof(MSG_WIN) + 3,
     keymap[KEY_RESTART]);
