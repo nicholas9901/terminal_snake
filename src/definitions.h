@@ -51,8 +51,8 @@
 
 /* ANSI escape codes */
 #define        ESC "\e["
-#define          Y "%d;1H"
-#define         YX "%d;%dH"
+#define          Y "%u;1H"
+#define         YX "%u;%uH"
 #define TERM_CLEAR ESC "2J"     
 #define    ALT_BUF ESC "?1049"
 #define     CURSOR ESC "?25"
@@ -123,12 +123,13 @@ typedef enum {
 
 /* Data types */
 typedef struct context {
-  int width;
-  int height;
-  int active_width;
-  int active_height;
-  int active_area;
-  int perimeter_size;
+  unsigned int 
+    width,
+    height,
+    active_width,
+    active_height,
+    active_area,
+    perimeter_size;
 } context;
 
 typedef struct input_buffer {
@@ -142,13 +143,12 @@ typedef struct gradient_pair {
 } gradient_pair;
 
 typedef struct point {
-  int x;
-  int y;
+  unsigned int x, y;
 } point;
 
 typedef struct snake {
-  int ghost_pointer;
-  int score;
+  unsigned int ghost_pointer;
+  unsigned int score;
   byte direction;
   byte new_segment_added;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR];

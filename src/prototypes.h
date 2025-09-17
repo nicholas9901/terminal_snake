@@ -17,7 +17,7 @@ extern byte
     
 extern unsigned char* keymap;
 
-extern int 
+extern unsigned int 
   width_terminal, 
   height_terminal, 
   mid_width_terminal,
@@ -56,7 +56,7 @@ byte dequeue_input(input_buffer* input_buffer);
 
 /* point.c */
 int allocate_all(snake*, point**, byte***);
-void init_point(point*, int, int);
+void init_point(point*, unsigned int, unsigned int);
 void init_bounds(point*, byte**);
 void init_snake(snake*, byte**, char (*)[SIZE_GRADIENT][SIZE_COLOR]);
 void init_apple(point*, byte**);
@@ -78,8 +78,8 @@ void draw_snake(snake*, byte);
 void draw_snake_all(snake*);
 void draw_snake_victory(snake* s);
 void draw_apple(point*);
-void draw_bounds(point*, int);
-void draw_score(int);
+void draw_bounds(point*);
+void draw_score(unsigned int);
 void draw_ribbons();
 void draw_pause();
 void draw_unpause();

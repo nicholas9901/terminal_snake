@@ -119,7 +119,7 @@ byte dequeue_input(input_buffer* input_buffer)
 {
   byte direction = input_buffer->inputs[0];
   if (input_buffer->current > 0) {
-    for (int i = 0; i < input_buffer->current; i++) {
+    for (size_t i = 0; i < input_buffer->current; i++) {
       input_buffer->inputs[i] = input_buffer->inputs[i + 1];
     }
     input_buffer->current--;

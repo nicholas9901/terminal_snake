@@ -20,8 +20,8 @@ void draw_redraw(snake* s, point* a, point* b)
     paused = TRUE;
     printf(
       TERM_CLEAR ESC YX "Window too small!\n" 
-      ESC YX "Required: %d, %d\n"
-      ESC YX "Current: %d, %d\n" FMT_CLEAR,
+      ESC YX "Required: %u, %u\n"
+      ESC YX "Current: %u, %u\n" FMT_CLEAR,
       mid_height_terminal - 1, mid_width_terminal - 9,
       mid_height_terminal, mid_width_terminal - 9, width_terminal_min, height_terminal_min,
       mid_height_terminal + 1, mid_width_terminal - 8, width_terminal, height_terminal);
@@ -30,7 +30,7 @@ void draw_redraw(snake* s, point* a, point* b)
   }
   draw_snake_all(s);               
   draw_apple(a);                   
-  draw_bounds(b, boundary_context.perimeter_size);                 
+  draw_bounds(b);                 
   draw_ribbons();                   
   draw_score(s->score);
   if (paused) {                        
@@ -60,7 +60,7 @@ void draw_snake(snake* s, byte clear)
     s->segments[1].y + top_bound_terminal, 
     (s->segments[1].x * 2) + left_bound_terminal
   );
-  for (int i = NUM_GRADIENTS - 1; i >= 0; i--) {
+  for (size_t i = NUM_GRADIENTS - 1; i-- != 0;) {
     printf(
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_terminal, 
@@ -78,8 +78,8 @@ void draw_snake(snake* s, byte clear)
 void draw_snake_all(snake* s) /* For redrawing the entire snake */
 {
   /* Draw the body of the snake */
-  int j = s->ghost_pointer - 1;
-  for (int i = NUM_GRADIENTS - 1; i >= 0; i--) {
+  size_t j = s->ghost_pointer - 1;
+  for (size_t i = NUM_GRADIENTS; i-- != 0;) {
     for (; j >= s->gradient_indices[i]; j--) {
       printf(
         ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
@@ -97,7 +97,7 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
 
 void draw_snake_victory(snake* s)
 {
-  for (int i = NUM_GRADIENTS - 1; i >= 0; i--) {
+  for (size_t i = NUM_GRADIENTS - 1; i-- != 0;) {
     printf(
       ESC YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_terminal, 
@@ -112,9 +112,9 @@ void draw_apple(point* a)
   printf(ESC YX SPRITE_APPLE, a->y + top_bound_terminal, (a->x * 2) + left_bound_terminal);
 }
 
-void draw_bounds(point* bounds, int perimeter_size) 
+void draw_bounds(point* bounds) 
 {
-  for (int i = 0; i < perimeter_size; i++) {
+  for (size_t i = 0; i < boundary_context.perimeter_size; i++) {
     printf(
       ESC YX "%s",
       bounds[i].y + top_bound_terminal,
@@ -123,9 +123,9 @@ void draw_bounds(point* bounds, int perimeter_size)
   }
 }
 
-void draw_score(int score)
+void draw_score(unsigned int score)
 {
-  printf(ESC YX FMT_INFO "%d" FMT_CLEAR, TOP_BOUND, (int) sizeof(MSG_SCORE), score);
+  printf(ESC YX FMT_INFO "%u" FMT_CLEAR, TOP_BOUND, (int) sizeof(MSG_SCORE), score);
 }
 
 void draw_ribbons()

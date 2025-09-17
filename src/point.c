@@ -6,7 +6,7 @@ int allocate_all(snake* s, point** bounds, byte*** collision)
   *bounds = malloc(boundary_context.perimeter_size * sizeof(point));
   *collision = calloc(boundary_context.width, sizeof(byte*));
   
-  for (int i = 0; i < boundary_context.width; i++) { 
+  for (size_t i = 0; i < boundary_context.width; i++) { 
     (*collision)[i] = calloc(boundary_context.height, sizeof(byte));
   }
 
@@ -14,7 +14,7 @@ int allocate_all(snake* s, point** bounds, byte*** collision)
   return 0;
 }
 
-void init_point(point* p, int x, int y)
+void init_point(point* p, unsigned int x, unsigned int y)
 {
   p->x = x;
   p->y = y;
@@ -22,9 +22,9 @@ void init_point(point* p, int x, int y)
 
 void init_bounds(point* p, byte** c)
 {
-  int points_index = 0;
+  size_t points_index = 0;
   
-  for (int i = 1; i < boundary_context.width - 1; i++) { 
+  for (size_t i = 1; i < boundary_context.width - 1; i++) { 
     
     /* Top Border */
     init_point(&p[points_index++], i, 0);
@@ -39,7 +39,7 @@ void init_bounds(point* p, byte** c)
     c[i][boundary_context.height - 1] = COLLISION_BAD;
   }
 
-  for (int i = 1; i < boundary_context.height - 1; i++) {
+  for (size_t i = 1; i < boundary_context.height - 1; i++) {
     
     /* Left border */
     init_point(&p[points_index++], 0, i);
@@ -73,33 +73,33 @@ void init_snake(
   s->gradient_chosen     = gradient_chosen;
   s->gradient_pointer    = PARTS_START - 1;
   s->gradient_indices[0] = 1;
-  for (int i = 1; i < NUM_GRADIENTS; i++) {
+  for (size_t i = 1; i < NUM_GRADIENTS; i++) {
     s->gradient_indices[i] = 2;
   }
 
   init_point(&s->segments[0], s->ghost_pointer, boundary_context.height / 2);
 
-  for (int i = 1; i <= s->ghost_pointer; i++) {
+  for (size_t i = 1; i <= s->ghost_pointer; i++) {
     s->segments[i].x = s->segments[i - 1].x - 1;
     s->segments[i].y = s->segments[i - 1].y;
   }
   
-  for (int i = 0; i < s->ghost_pointer; i++) {
+  for (size_t i = 0; i < s->ghost_pointer; i++) {
     c[s->segments[i].x][s->segments[i].y] = COLLISION_BAD;
   }
 }
 
 void init_apple(point* a, byte** c)
 {
-  int x_adjusted = (boundary_context.width + 1) / 2;
+  unsigned int x_adjusted = (boundary_context.width + 1) / 2;
   init_point(a, x_adjusted, boundary_context.height / 2);
   c[x_adjusted][boundary_context.height / 2] = COLLISION_APPLE;
 }
 
 void reset_bounds(byte** collision)
 {
-  for (int i = 1; i <= boundary_context.active_height; i++) {
-    for (int j = 1; j <= boundary_context.active_width; j++) {
+  for (size_t i = 1; i <= boundary_context.active_height; i++) {
+    for (size_t j = 1; j <= boundary_context.active_width; j++) {
       collision[j][i] = COLLISION_NONE;
     }
   }
@@ -107,8 +107,9 @@ void reset_bounds(byte** collision)
 
 void update_apple(point* a, byte** c)
 {
-  int x = (rand() % boundary_context.active_width) + 1;
-  int y = (rand() % boundary_context.active_height) + 1;
+  unsigned int
+    x = (rand() % boundary_context.active_width) + 1,
+    y = (rand() % boundary_context.active_height) + 1;
 
   while(c[x][y] == COLLISION_BAD) {
     if ((x = (x + 1) % (boundary_context.width - 1)) == 0) {
@@ -142,7 +143,7 @@ int add_segment(snake* s)
   tail_2->y = tail_3->y;
 
   /* Also update the gradient indices */
-  for (int i = s->gradient_pointer; i < NUM_GRADIENTS; i++) {
+  for (size_t i = s->gradient_pointer; i < NUM_GRADIENTS; i++) {
     s->gradient_indices[i]++;
   }
   s->gradient_pointer = (s->gradient_pointer % NUM_GRADIENTS) + 1;
@@ -160,7 +161,7 @@ int move_snake(
   byte* collision_pos;
   byte  clear = TRUE;
 
-  for (int i = s->ghost_pointer; i > 0; i--) {
+  for (size_t i = s->ghost_pointer; i > 0; i--) {
     s->segments[i].x = s->segments[i - 1].x;
     s->segments[i].y = s->segments[i - 1].y;
   }
@@ -222,7 +223,7 @@ void free_all(snake* s, point* b, byte** c)
 {
   free(s->segments);
   free(b);
-  for (int i = 0; i < boundary_context.width; i++) { 
+  for (size_t i = 0; i < boundary_context.width; i++) { 
     free(c[i]);
   }
   free(c);

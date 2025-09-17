@@ -8,7 +8,7 @@ OBJS      = $(DIR_BUILD)/main.o    \
 			$(DIR_BUILD)/draw.o    
 HEADERS   = $(DIR_SRC)/prototypes.h $(DIR_SRC)/definitions.h 
 CC        = clang
-FLAGS     = -g
+FLAGS     = -Wall -Wextra -O3
 
 all: $(EXE)
 

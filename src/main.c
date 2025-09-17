@@ -13,7 +13,7 @@ byte
 	win       = FALSE,
 	quit      = FALSE;
 
-int 
+unsigned int 
   width_terminal, 
   height_terminal, 
   mid_width_terminal,
@@ -41,14 +41,14 @@ static inline void usage_and_exit()
     "Usage: terminal_snake [OPTIONS]...\n\n"
     "Option        Long Option               Description\n"
     "-h            --help                    Display this message\n"
-    "-s            --speed <speed>           Change the speed (default %d)\n"
-    "-b            --boundary <width,height> Change the boundary (default %d,%d)\n"
+    "-s            --speed <speed>           Change the speed (default %u)\n"
+    "-b            --boundary <width,height> Change the boundary (default %u,%u)\n"
     "-k <keymap>   --keymap <keymap>         Choose the keymap (qwerty|azerty|dvorak)\n"
     "-g <gradient> --gradient <gradient>     Choose the gradient\n\n"
     "Gradients:\n", GAME_SPEED_MILLISECONDS, BOUNDARY_WIDTH, BOUNDARY_HEIGHT);
-  for (int i = 0; i < NUM_GRADIENTS; i++) {
+  for (size_t i = 0; i < NUM_GRADIENTS; i++) {
     printf("%-*s", SIZE_NAME, gradient_table[i].name);
-    for (int j = SIZE_GRADIENT - 1; j >= 0; j--) {
+    for (size_t j = SIZE_GRADIENT - 1; j >= 0; j--) {
       printf(ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, gradient_table[i].colors[j]);
     }
     printf(ESC SPRITE_SNAKE_HEAD"\n");
@@ -56,7 +56,7 @@ static inline void usage_and_exit()
   exit(0);
 }
 
-static inline void calculate_context(int width, int height)
+static inline void calculate_context(unsigned int width, unsigned int height)
 {
   boundary_context.width          = width;
   boundary_context.height         = height;
@@ -68,8 +68,8 @@ static inline void calculate_context(int width, int height)
 
 int main(int argc, char** argv) 
 {
-  int game_speed = GAME_SPEED;
-  int game_speed_arg, width_arg, height_arg;
+  unsigned int game_speed = GAME_SPEED;
+  unsigned int game_speed_arg, width_arg, height_arg;
   char opt;
   char* c;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR] = &(gradient_table[2].colors);
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 	      game_speed_arg = atoi(optarg);
 	      if (game_speed_arg > GAME_SPEED_MAX) {
 	        printf(
-            "Chosen speed %d exceeds the maximum value (%d)\n", 
+            "Chosen speed %u exceeds the maximum value (%u)\n", 
             game_speed_arg, GAME_SPEED_MAX);
   	      exit(0);
 	      }
@@ -118,7 +118,7 @@ int main(int argc, char** argv)
 	      height_arg = atoi(c + 1);
 	      if (width_arg < BOUNDARY_WIDTH_MIN || height_arg < BOUNDARY_HEIGHT_MIN) {
 	        printf(
-            "Chosen boundary dimensions %d,%d are too small (Minimum dimensions: %d,%d)\n", 
+            "Chosen boundary dimensions %u,%u are too small (Minimum dimensions: %u,%u)\n", 
             width_arg, height_arg, BOUNDARY_WIDTH_MIN, BOUNDARY_HEIGHT_MIN);
 	        exit(0);
 	      }
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
 	      }
 	      break;
       case 'g':
-        for (int i = 0; i < NUM_GRADIENTS; i++) {
+        for (size_t i = 0; i < NUM_GRADIENTS; i++) {
           if (!strcmp(optarg, gradient_table[i].name)) {
             gradient_chosen = &(gradient_table[i].colors);
             goto found;
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
   init_apple(&apple, collision);
   
   for (;;) {
-    for (int times_to_poll = 0; times_to_poll < game_speed / POLLING_RATE; times_to_poll++) {
+    for (size_t times_to_poll = 0; times_to_poll < game_speed / POLLING_RATE; times_to_poll++) {
       queue_input(&input_buffer, get_action(&key));
       if (quit) {
         goto end;
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
           win       = TRUE;
           game_over = TRUE;
           paused    = TRUE;
-          for (int i = 0; i < SIZE_GRADIENT; i++) {
+          for (size_t i = 0; i < SIZE_GRADIENT; i++) {
             snake.gradient_indices[i] = (snake.gradient_indices[i] + 1) % snake.ghost_pointer;
           }
           draw_snake_victory(&snake);
@@ -205,7 +205,7 @@ int main(int argc, char** argv)
           break;
       }
     } else if (win && !hidden) {
-      for (int i = 0; i < SIZE_GRADIENT; i++) {
+      for (size_t i = 0; i < SIZE_GRADIENT; i++) {
         snake.gradient_indices[i] = (snake.gradient_indices[i] + 1) % snake.ghost_pointer;
       }
       draw_snake_victory(&snake);
