@@ -69,6 +69,7 @@ static inline void calculate_context(int width, int height)
 int main(int argc, char** argv) 
 {
   int game_speed = GAME_SPEED;
+  int width_arg, height_arg;
   char opt;
   char* c;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR] = &(gradient_table[2].colors);
@@ -85,7 +86,7 @@ int main(int argc, char** argv)
   const struct option long_options[] = {
     {"help",     0, NULL, 'h'},
     {"speed",    1, NULL, 's'},
-    {"boundary", 1, NULL, 'p'},
+    {"boundary", 1, NULL, 'b'},
     {"keymap",   1, NULL, 'k'},
     {"gradient", 1, NULL, 'g'},
     {NULL,       0, NULL,   0}
@@ -106,7 +107,15 @@ int main(int argc, char** argv)
 	        }
 	      }
 	      *c = '\0';
-	      calculate_context(atoi(optarg), atoi(c + 1));
+	      width_arg  = atoi(optarg);
+	      height_arg = atoi(c + 1);
+	      if (width_arg < BOUNDARY_WIDTH_MIN || height_arg < BOUNDARY_HEIGHT_MIN) {
+	        printf(
+            "Chosen boundary dimensions %d,%d are too small (Minimum dimensions: %d,%d)\n", 
+            width_arg, height_arg, BOUNDARY_WIDTH_MIN, BOUNDARY_HEIGHT_MIN);
+	        exit(0);
+	      }
+	      calculate_context(width_arg, height_arg);
 	      break;
 	    case 'k':
 	      if      (!strcmp(optarg, "qwerty")) break;
@@ -127,7 +136,7 @@ int main(int argc, char** argv)
         printf("Invalid argument for gradient: %s\n", optarg);
         usage_and_exit();
         found:
-        break;
+          break;
       case '?':
         usage_and_exit();
 	  }

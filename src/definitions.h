@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
-#define PERIMETER(width, height) (2 * (width + height)) - 4
+#define PERIMETER(width, height) ((2 * (width + height)) - 4)
 #define ACTIVE(length) (length - 2)
 #define AREA(width, height) (width * height)
 
@@ -23,6 +23,8 @@
 #define            POLLING_RATE 10000
 #define          BOUNDARY_WIDTH 16
 #define         BOUNDARY_HEIGHT BOUNDARY_WIDTH
+#define      BOUNDARY_WIDTH_MIN 7
+#define     BOUNDARY_HEIGHT_MIN 4
 
 /* Buffer sizes */
 #define SIZE_INPUT_BUFFER 3
