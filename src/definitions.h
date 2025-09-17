@@ -20,6 +20,8 @@
 #define             PARTS_START 3
 #define              GAME_SPEED 100000
 #define GAME_SPEED_MILLISECONDS (GAME_SPEED / 1000)
+#define   GAME_SPEED_MUL_FACTOR 10000000
+#define          GAME_SPEED_MAX 1000
 #define            POLLING_RATE 10000
 #define          BOUNDARY_WIDTH 16
 #define         BOUNDARY_HEIGHT BOUNDARY_WIDTH

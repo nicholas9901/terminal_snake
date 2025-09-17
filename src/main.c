@@ -69,7 +69,7 @@ static inline void calculate_context(int width, int height)
 int main(int argc, char** argv) 
 {
   int game_speed = GAME_SPEED;
-  int width_arg, height_arg;
+  int game_speed_arg, width_arg, height_arg;
   char opt;
   char* c;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR] = &(gradient_table[2].colors);
@@ -97,7 +97,14 @@ int main(int argc, char** argv)
 	    case 'h':
 	      usage_and_exit();
 	    case 's':
-	      game_speed = atoi(optarg) * 1000;
+	      game_speed_arg = atoi(optarg);
+	      if (game_speed_arg > GAME_SPEED_MAX) {
+	        printf(
+            "Chosen speed %d exceeds the maximum value (%d)\n", 
+            game_speed_arg, GAME_SPEED_MAX);
+  	      exit(0);
+	      }
+	      game_speed = (int)((float) 1 / game_speed_arg * GAME_SPEED_MUL_FACTOR);
 	      break;
 	    case 'b':
 	      for (c = optarg; *c != ','; c++) {
