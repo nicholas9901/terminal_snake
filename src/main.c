@@ -48,7 +48,7 @@ static inline void usage_and_exit()
     "Gradients:\n", GAME_SPEED_MILLISECONDS, BOUNDARY_WIDTH, BOUNDARY_HEIGHT);
   for (size_t i = 0; i < NUM_GRADIENTS; i++) {
     printf("%-*s", SIZE_NAME, gradient_table[i].name);
-    for (size_t j = SIZE_GRADIENT - 1; j >= 0; j--) {
+    for (size_t j = SIZE_GRADIENT - 1; j-- != 0;) {
       printf(ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, gradient_table[i].colors[j]);
     }
     printf(ESC SPRITE_SNAKE_HEAD"\n");
