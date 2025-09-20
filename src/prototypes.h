@@ -4,7 +4,9 @@
 #include "definitions.h"
 
 /* External variables */
+#ifndef _WIN32
 extern struct termios initial;
+#endif
 
 extern byte 
   paused,
@@ -32,24 +34,27 @@ extern unsigned int
 extern gradient_pair gradient_table[NUM_GRADIENTS];
 extern context boundary_context;
 
-/* main.c */
-static inline void usage_and_exit();
+/* compatibility.c */
+void get_key(unsigned char*);
+void get_terminal_size(unsigned int* width, unsigned int* height);
+void terminal_switch_alternate();
+void terminal_switch_main();
 
 /* startup.c */
 void clean();
 void init_canvas();
 void init_term();
 void init_signal();
-void handle_exit();
+void handle_exit(int);
 
 /* input.c */
 void set_keymap(byte);
 byte get_action(unsigned char* key);
-byte parse_keypress(unsigned char* key);
-static inline byte parse_state_game_over(unsigned char*, byte*);
-static inline byte parse_state_hidden(unsigned char*, byte*);
-static inline byte parse_state_paused(unsigned char*, byte*);
-static inline byte parse_state_movement(unsigned char*);
+byte parse_action(unsigned char* key);
+byte parse_state_game_over(unsigned char*, byte*);
+byte parse_state_hidden(unsigned char*, byte*);
+byte parse_state_paused(unsigned char*, byte*);
+byte parse_state_movement(unsigned char*);
 void queue_input(input_buffer* input_buffer, byte direction);
 byte dequeue_input(input_buffer* input_buffer);
 

@@ -1,10 +1,11 @@
 DIR_BUILD = build
 DIR_SRC   = src
 EXE       = $(DIR_BUILD)/terminal_snake
-OBJS      = $(DIR_BUILD)/main.o    \
-			$(DIR_BUILD)/startup.o \
-			$(DIR_BUILD)/input.o   \
-			$(DIR_BUILD)/point.o   \
+OBJS      = $(DIR_BUILD)/main.o          \
+			$(DIR_BUILD)/compatibility.o \
+			$(DIR_BUILD)/startup.o 		 \
+			$(DIR_BUILD)/input.o   		 \
+			$(DIR_BUILD)/point.o   		 \
 			$(DIR_BUILD)/draw.o    
 HEADERS   = $(DIR_SRC)/prototypes.h $(DIR_SRC)/definitions.h 
 CC        = clang

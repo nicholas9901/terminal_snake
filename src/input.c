@@ -12,13 +12,13 @@ void set_keymap(byte keymap_chosen) { keymap = keymaps[keymap_chosen]; }
 
 byte get_action(unsigned char* key)
 {
-  read(0, key, 1);    
-  byte action = parse_keypress(key);
+  get_key(key);
+  byte action = parse_action(key);
   *key = KEY_NONE;
   return action;
 }
 
-byte parse_keypress(unsigned char* key)
+byte parse_action(unsigned char* key)
 {
   byte success = FALSE;
   byte current = ACTION_NONE;
@@ -31,11 +31,11 @@ byte parse_keypress(unsigned char* key)
   return parse_state_movement(key);
 }
 
-static inline byte parse_state_movement(unsigned char* key)
+byte parse_state_movement(unsigned char* key)
 {
   if (*key == '\x1b') { 
-    read(0, key, 1); /* Skip to the important part of the key code */    
-    read(0, key, 1);    
+    get_key(key); /* Skip to the important part of the key code */    
+    get_key(key);    
     switch (*key) {
       case 'A': return KEY_UP;
       case 'B': return KEY_DOWN;
@@ -51,7 +51,7 @@ static inline byte parse_state_movement(unsigned char* key)
   return ACTION_NONE;
 }
 
-static inline byte parse_state_paused(unsigned char* key, byte* success)
+byte parse_state_paused(unsigned char* key, byte* success)
 {
   if (paused) {
     parse_state_hidden(key, success);
@@ -70,7 +70,7 @@ static inline byte parse_state_paused(unsigned char* key, byte* success)
   return ACTION_NONE;
 }
 
-static inline byte parse_state_hidden(unsigned char* key, byte* success)
+byte parse_state_hidden(unsigned char* key, byte* success)
 {
   if (hidden) {
     if (*key != KEY_NONE) {
@@ -92,7 +92,7 @@ static inline byte parse_state_hidden(unsigned char* key, byte* success)
   return ACTION_NONE;
 }
 
-static inline byte parse_state_game_over(unsigned char* key, byte* success)
+byte parse_state_game_over(unsigned char* key, byte* success)
 {
   if (game_over) {
     parse_state_hidden(key, success);

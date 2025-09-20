@@ -1,6 +1,8 @@
 #include "prototypes.h"
 
+#ifndef _WIN32
 struct termios initial;
+#endif
 
 void clean() 
 {
@@ -10,16 +12,13 @@ void clean()
 		CURSOR ON
 	  ALT_BUF OFF
   );
-	tcsetattr(1, TCSANOW, &initial);
+  terminal_switch_main();
 }
 
 void init_canvas() 
 {
 	printf(TERM_CLEAR);
-  struct winsize ws;
-	ioctl(1, TIOCGWINSZ, &ws);
-  width_terminal        = ws.ws_col;
-  height_terminal       = ws.ws_row;
+  get_terminal_size(&width_terminal, &height_terminal);
   width_terminal_min    = MAX(sizeof(MSG_CONTROLS) - 5, boundary_context.width);
   height_terminal_min   = boundary_context.height + 2;
   mid_width_terminal    = width_terminal / 2;
@@ -33,23 +32,17 @@ void init_canvas()
 
 void init_term() 
 {
-	struct termios current;
-  fcntl(0, F_SETFL, O_NONBLOCK);
 	setvbuf(stdout, NULL, _IONBF, 0);
-	tcgetattr(1, &current);
-	initial = current;
-	printf(
-	  ALT_BUF ON 
-	  CURSOR OFF);
-	current.c_lflag &= (~ECHO & ~ICANON);
-	tcsetattr(1, TCSANOW, &current);
+  terminal_switch_alternate();
 }
 
 void init_signal()
 {
-	signal(SIGTERM, handle_exit);
-	signal(SIGINT, handle_exit);
-	signal(SIGWINCH, init_canvas);
+  signal(SIGTERM, handle_exit);
+  signal(SIGINT, handle_exit);
+#ifndef _WIN32
+  signal(SIGWINCH, init_canvas);
+#endif
 }
 
-void handle_exit() { quit = TRUE; }
+void  handle_exit(int) { quit = TRUE; }

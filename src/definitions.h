@@ -3,10 +3,18 @@
 #include <stdint.h>
 #include <string.h>
 #include <signal.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <termios.h>
 #include <unistd.h>
+
+#if defined(_WIN32)
+#include <windows.h>
+#include <conio.h>
+#elif defined(__linux__)
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <fcntl.h>
+#else
+#error "Only Windows and Linux are supported."
+#endif
 
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 #define PERIMETER(width, height) ((2 * (width + height)) - 4)
@@ -51,8 +59,8 @@
 
 /* ANSI escape codes */
 #define        ESC "\e["
-#define          Y "%u;1H"
-#define         YX "%u;%uH"
+#define          Y ESC "%u;1H"
+#define         YX ESC "%u;%uH"
 #define TERM_CLEAR ESC "2J"     
 #define    ALT_BUF ESC "?1049"
 #define     CURSOR ESC "?25"

@@ -96,6 +96,7 @@ int main(int argc, char** argv)
 	  switch (opt) {
 	    case 'h':
 	      usage_and_exit();
+        break;
 	    case 's':
 	      game_speed_arg = atoi(optarg);
 	      if (game_speed_arg > GAME_SPEED_MAX) {
@@ -146,6 +147,7 @@ int main(int argc, char** argv)
           break;
       case '?':
         usage_and_exit();
+        break;
 	  }
   }
   
