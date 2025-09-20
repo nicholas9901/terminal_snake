@@ -28,9 +28,15 @@ void get_terminal_size(unsigned int* width, unsigned int* height)
 void terminal_switch_alternate()
 {
 #ifdef _WIN32
-	printf(
-	  ALT_BUF ON 
-	  CURSOR OFF);
+  HANDLE hOut  = GetStdHandle(STD_OUTPUT_HANDLE);
+  DWORD dwMode = 0;
+  if (GetConsoleMode(hOut, &dwMode)) {
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+  }
+  printf(
+    ALT_BUF ON 
+    CURSOR OFF);
 #else
 	struct termios current;
   fcntl(0, F_SETFL, O_NONBLOCK);
