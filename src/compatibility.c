@@ -20,8 +20,8 @@ void get_terminal_size(unsigned int* width, unsigned int* height)
 #else
   struct winsize ws;
 	ioctl(1, TIOCGWINSZ, &ws);
-  width_terminal  = ws.ws_col;
-  height_terminal = ws.ws_row;
+  *width  = ws.ws_col;
+  *height = ws.ws_row;
 #endif
 }
 
