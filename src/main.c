@@ -30,7 +30,7 @@ gradient_pair gradient_table[NUM_GRADIENTS] = {
   {"cool",  {"21",  "27",  "33",  "39",  "45",  "51"}},
   {"snake", {"34",  "40",  "46",  "82",  "118", "154"}},
   {"16bit", {"9",   "10",  "11",  "12",  "13",  "14"}},
-  {"none",  {"239", "239", "239", "239", "239", "239"}}
+  {"none",  {"7",   "7",   "7",   "7",   "7",   "7"}}
 };
 
 context boundary_context;
@@ -48,7 +48,7 @@ static inline void usage_and_exit()
     "Gradients:\n", GAME_SPEED_MILLISECONDS, BOUNDARY_WIDTH, BOUNDARY_HEIGHT);
   for (size_t i = 0; i < NUM_GRADIENTS; i++) {
     printf("%-*s", SIZE_NAME, gradient_table[i].name);
-    for (size_t j = SIZE_GRADIENT - 1; j-- != 0;) {
+    for (size_t j = SIZE_GRADIENT; j-- != 0;) {
       printf(ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, gradient_table[i].colors[j]);
     }
     printf(ESC SPRITE_SNAKE_HEAD"\n");

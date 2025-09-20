@@ -54,34 +54,26 @@ void draw_snake(snake* s, byte clear)
     printf(
       YX SPRITE_CLEAR, 
       s->segments[s->ghost_pointer].y + top_bound_terminal, 
-      (s->segments[s->ghost_pointer].x * 2) + left_bound_terminal
-    );    
-}
-  printf(
-    YX SPRITE_SNAKE_BODY, 
-    s->segments[1].y + top_bound_terminal, 
-    (s->segments[1].x * 2) + left_bound_terminal
-  );
-  for (size_t i = NUM_GRADIENTS - 1; i-- != 0;) {
+      (s->segments[s->ghost_pointer].x * 2) + left_bound_terminal);    
+  }
+  for (size_t i = SIZE_GRADIENT; i-- != 0;) {
     printf(
       YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_terminal, 
       (s->segments[s->gradient_indices[i]].x * 2) + left_bound_terminal,
-      (*s->gradient_chosen)[i]
-    );
+      (*s->gradient_chosen)[i]);
   }
   printf(
     YX SPRITE_SNAKE_HEAD, 
     s->segments[0].y + top_bound_terminal, 
-    (s->segments[0].x * 2) + left_bound_terminal
-  );
+    (s->segments[0].x * 2) + left_bound_terminal);
 }
 
 void draw_snake_all(snake* s) /* For redrawing the entire snake */
 {
   /* Draw the body of the snake */
   size_t j = s->ghost_pointer - 1;
-  for (size_t i = NUM_GRADIENTS; i-- != 0;) {
+  for (size_t i = SIZE_GRADIENT; i-- != 0;) {
     for (; j >= s->gradient_indices[i]; j--) {
       printf(
         YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
@@ -93,19 +85,17 @@ void draw_snake_all(snake* s) /* For redrawing the entire snake */
   printf(
     YX SPRITE_SNAKE_HEAD, 
     s->segments[0].y + top_bound_terminal, 
-    (s->segments[0].x * 2) + left_bound_terminal
-  );
+    (s->segments[0].x * 2) + left_bound_terminal);
 }
 
 void draw_snake_victory(snake* s)
 {
-  for (size_t i = NUM_GRADIENTS - 1; i-- != 0;) {
+  for (size_t i = SIZE_GRADIENT; i-- != 0;) {
     printf(
       YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
       s->segments[s->gradient_indices[i]].y + top_bound_terminal, 
       (s->segments[s->gradient_indices[i]].x * 2) + left_bound_terminal,
-      (*s->gradient_chosen)[i]
-    );
+      (*s->gradient_chosen)[i]);
   }
 }
 

@@ -73,7 +73,7 @@ void init_snake(
   s->gradient_chosen     = gradient_chosen;
   s->gradient_pointer    = PARTS_START - 1;
   s->gradient_indices[0] = 1;
-  for (size_t i = 1; i < NUM_GRADIENTS; i++) {
+  for (size_t i = 1; i < SIZE_GRADIENT; i++) {
     s->gradient_indices[i] = 2;
   }
 
@@ -143,10 +143,10 @@ int add_segment(snake* s)
   tail_2->y = tail_3->y;
 
   /* Also update the gradient indices */
-  for (size_t i = s->gradient_pointer; i < NUM_GRADIENTS; i++) {
+  for (size_t i = s->gradient_pointer; i < SIZE_GRADIENT; i++) {
     s->gradient_indices[i]++;
   }
-  s->gradient_pointer = (s->gradient_pointer % NUM_GRADIENTS) + 1;
+  s->gradient_pointer = (s->gradient_pointer % SIZE_GRADIENT) + 1;
   
   return FALSE;
 }
