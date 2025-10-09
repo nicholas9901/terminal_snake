@@ -47,4 +47,3 @@ make -f Makefile-windows
 - Windows version doesn't redrawing and resizing upon resizing the terminal. Windows doesn't have an equivalent to the SIGWINCH signal, so some refactoring has to be done to accomodate this.
 - Windows version has some banding when clearing the tail of the snake.
 - On the [Kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator displaying the help message will print unescaped color codes when displaying the gradients.
-- On [Termux](https://termux.dev/en/) the program hangs when being run, but running with the `-h` flag to display help message works. This was caused by commit [`6777051`](https://github.com/nicholas9901/terminal_snake/commit/677705108436ef02f6bfe05af20c9174ecd23ec2).
