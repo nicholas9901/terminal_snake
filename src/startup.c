@@ -45,4 +45,8 @@ void init_signal()
 #endif
 }
 
-void  handle_exit(int) { quit = TRUE; }
+void handle_exit(int signal) 
+{ 
+	(void) signal; 
+	quit = TRUE; 
+}
