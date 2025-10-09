@@ -216,6 +216,9 @@ int main(int argc, char** argv)
   end:
     clean();
     free_all(&snake, bounds, collision);
+    return 0;
+    
+  return 1;
 }
 
 
