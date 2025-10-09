@@ -99,7 +99,11 @@
 #define         MSG_WIN "You Win! " MSG_RESTART
 
 /* Types */
-typedef unsigned char byte;
+typedef int8_t   i8;
+typedef uint8_t  u8;
+typedef uint16_t i16;
+typedef uint16_t u16;
+typedef uint32_t u32;
 
 typedef enum {
   STATUS_NONE,
@@ -131,7 +135,7 @@ typedef enum {
 
 /* Data types */
 typedef struct context {
-  unsigned int 
+  u16 
     width,
     height,
     active_width,
@@ -141,8 +145,8 @@ typedef struct context {
 } context;
 
 typedef struct input_buffer {
-  byte inputs[SIZE_INPUT_BUFFER];
-  byte current;
+  u8 inputs[SIZE_INPUT_BUFFER];
+  u8 current;
 } input_buffer;
 
 typedef struct gradient_pair {
@@ -151,16 +155,16 @@ typedef struct gradient_pair {
 } gradient_pair;
 
 typedef struct point {
-  unsigned int x, y;
+  u16 x, y;
 } point;
 
 typedef struct snake {
-  unsigned int ghost_pointer;
-  unsigned int score;
-  byte direction;
-  byte new_segment_added;
+  u16 ghost_pointer;
+  u16 score;
+  u8 direction;
+  u8 new_segment_added;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR];
-  byte gradient_pointer;
-  byte gradient_indices[SIZE_GRADIENT];
+  u8 gradient_pointer;
+  u8 gradient_indices[SIZE_GRADIENT];
   point* segments;
 } snake;

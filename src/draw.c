@@ -48,7 +48,7 @@ void draw_redraw(snake* s, point* a, point* b)
   }                                    
 }
 
-void draw_snake(snake* s, byte clear) 
+void draw_snake(snake* s, u8 clear) 
 {
   if (clear) {
     printf(
@@ -72,8 +72,8 @@ void draw_snake(snake* s, byte clear)
 void draw_snake_all(snake* s) /* For redrawing the entire snake */
 {
   /* Draw the body of the snake */
-  size_t j = s->ghost_pointer - 1;
-  for (size_t i = SIZE_GRADIENT; i-- != 0;) {
+  i16 j = s->ghost_pointer - 1;
+  for (u16 i = SIZE_GRADIENT; i-- != 0;) {
     for (; j >= s->gradient_indices[i]; j--) {
       printf(
         YX ESC BG "%s" FMT_END SPRITE_BLOCK FMT_CLEAR, 
@@ -115,7 +115,7 @@ void draw_bounds(point* bounds)
   }
 }
 
-void draw_score(unsigned int score)
+void draw_score(u16 score)
 {
   printf(YX FMT_INFO "%u" FMT_CLEAR, TOP_BOUND, (int) sizeof(MSG_SCORE), score);
 }

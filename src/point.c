@@ -1,26 +1,26 @@
 #include "prototypes.h"
 
-int allocate_all(snake* s, point** bounds, byte*** collision)
+u8 allocate_all(snake* s, point** bounds, u8*** collision)
 {
   s->segments = malloc(boundary_context.active_area * sizeof(point));
   *bounds = malloc(boundary_context.perimeter_size * sizeof(point));
-  *collision = calloc(boundary_context.width, sizeof(byte*));
+  *collision = calloc(boundary_context.width, sizeof(u8*));
   
   for (size_t i = 0; i < boundary_context.width; i++) { 
-    (*collision)[i] = calloc(boundary_context.height, sizeof(byte));
+    (*collision)[i] = calloc(boundary_context.height, sizeof(u8));
   }
 
   if (!s->segments || !bounds || !collision) { return 1; }
   return 0;
 }
 
-void init_point(point* p, unsigned int x, unsigned int y)
+void init_point(point* p, u16 x, u16 y)
 {
   p->x = x;
   p->y = y;
 }
 
-void init_bounds(point* p, byte** c)
+void init_bounds(point* p, u8** c)
 {
   size_t points_index = 0;
   
@@ -63,7 +63,7 @@ void init_bounds(point* p, byte** c)
 
 void init_snake(
   snake* s, 
-  byte** c, 
+  u8** c, 
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR])
 {
   s->ghost_pointer       = PARTS_START;
@@ -89,14 +89,14 @@ void init_snake(
   }
 }
 
-void init_apple(point* a, byte** c)
+void init_apple(point* a, u8** c)
 {
-  unsigned int x_adjusted = (boundary_context.width + 1) / 2;
+  u16 x_adjusted = (boundary_context.width + 1) / 2;
   init_point(a, x_adjusted, boundary_context.height / 2);
   c[x_adjusted][boundary_context.height / 2] = COLLISION_APPLE;
 }
 
-void reset_bounds(byte** collision)
+void reset_bounds(u8** collision)
 {
   for (size_t i = 1; i <= boundary_context.active_height; i++) {
     for (size_t j = 1; j <= boundary_context.active_width; j++) {
@@ -105,9 +105,9 @@ void reset_bounds(byte** collision)
   }
 }
 
-void update_apple(point* a, byte** c)
+void update_apple(point* a, u8** c)
 {
-  unsigned int
+  u16
     x = (rand() % boundary_context.active_width) + 1,
     y = (rand() % boundary_context.active_height) + 1;
 
@@ -126,7 +126,7 @@ void update_apple(point* a, byte** c)
   draw_apple(a);
 }
 
-int add_segment(snake* s)
+u8 add_segment(snake* s)
 {
   if (s->ghost_pointer == boundary_context.active_area) { 
     return TRUE;
@@ -151,15 +151,15 @@ int add_segment(snake* s)
   return FALSE;
 }
 
-int move_snake(
+u8 move_snake(
   snake* s, 
   point* a, 
-  byte** c, 
-  byte direction
+  u8** c, 
+  u8 direction
 ) 
 {
-  byte* collision_pos;
-  byte  clear = TRUE;
+  u8* collision_pos;
+  u8  clear = TRUE;
 
   for (size_t i = s->ghost_pointer; i > 0; i--) {
     s->segments[i].x = s->segments[i - 1].x;
@@ -219,7 +219,7 @@ int move_snake(
   return STATUS_BAD;
 }
 
-void free_all(snake* s, point* b, byte** c)
+void free_all(snake* s, point* b, u8** c)
 {
   free(s->segments);
   free(b);

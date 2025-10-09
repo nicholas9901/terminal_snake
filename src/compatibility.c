@@ -10,7 +10,7 @@ void get_key(unsigned char* key)
 #endif
 }
 
-void get_terminal_size(unsigned int* width, unsigned int* height)
+void get_terminal_size(u16* width, u16* height)
 {
 #ifdef _WIN32
   CONSOLE_SCREEN_BUFFER_INFO csbi;

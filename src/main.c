@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <getopt.h>
 
-byte 
+u8 
 	paused    = FALSE,
 	hidden    = FALSE,
 	redraw    = FALSE,
@@ -13,7 +13,7 @@ byte
 	win       = FALSE,
 	quit      = FALSE;
 
-unsigned int 
+u16 
   width_terminal, 
   height_terminal, 
   mid_width_terminal,
@@ -56,7 +56,7 @@ static inline void usage_and_exit()
   exit(0);
 }
 
-static inline void calculate_context(unsigned int width, unsigned int height)
+static inline void calculate_context(u16 width, u16 height)
 {
   boundary_context.width          = width;
   boundary_context.height         = height;
@@ -68,16 +68,16 @@ static inline void calculate_context(unsigned int width, unsigned int height)
 
 int main(int argc, char** argv) 
 {
-  unsigned int game_speed = GAME_SPEED;
-  unsigned int game_speed_arg, width_arg, height_arg;
-  char opt;
+  u32 game_speed = GAME_SPEED;
+  u16 game_speed_arg, width_arg, height_arg;
+  i8 opt;
   char* c;
   char (*gradient_chosen)[SIZE_GRADIENT][SIZE_COLOR] = &(gradient_table[2].colors);
-  byte keymap_chosen = QWERTY;
+  u8 keymap_chosen = QWERTY;
   snake snake;
   point apple;
   point* bounds;
-  byte** collision;  
+  u8** collision;  
   input_buffer input_buffer = {{KEY_RIGHT, KEY_RIGHT, KEY_RIGHT}, 0};
   unsigned char key = KEY_NONE;
   
