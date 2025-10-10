@@ -44,6 +44,6 @@ make -f Makefile-windows
 ## Issues
 
 - Windows version is about twice as slow as the Linux version. Running with `-speed 200` gives a similar speed.
-- Windows version doesn't redrawing and resizing upon resizing the terminal. Windows doesn't have an equivalent to the SIGWINCH signal, so some refactoring has to be done to accomodate this.
+- Windows version doesn't support redrawing and resizing the interface upon resizing the terminal. Windows doesn't have an equivalent to the SIGWINCH signal, so some refactoring has to be done to accomodate this.
 - Windows version has some banding when clearing the tail of the snake.
 - On the [Kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator displaying the help message will print unescaped color codes when displaying the gradients.
